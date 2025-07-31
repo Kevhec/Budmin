@@ -1,0 +1,21 @@
+{
+  "name": "@budmin/tailwind-config",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": true,
+  "exports": {
+    ".": "./shared-styles.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.13.1",
+  "dependencies": {
+    "tailwindcss": "^4.1.11",
+    "tw-animate-css": "^1.3.6"
+  }
+}

@@ -1,0 +1,10 @@
+# Config packages shouldn't be linted
+packages/typescript-config/
+packages/eslint-config/
+.eslintrc.cjs
+
+# Standard ignores
+node_modules/
+dist/
+build/
+.turbo/

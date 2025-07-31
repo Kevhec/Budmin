@@ -1,0 +1,47 @@
+{
+  "extends": "@tsconfig/node16/tsconfig.json",
+  "compilerOptions": {
+    // Treat files as modules even if it doesn't use import/export
+		"moduleDetection": "force",
+		// Ignore module structure
+		"module": "ESNext",
+		// Allow JSON modules to be imported
+		"resolveJsonModule": true,
+		// Allow JS files to be imported from TS and vice versa
+		"allowJs": true,
+		// Use correct ESM import behavior
+		"esModuleInterop": true,
+		// Disallow features that require cross-file awareness
+		"isolatedModules": true,
+    "skipLibCheck": true,
+    "target": "ESNext",
+    "noEmit": true,
+    "moduleResolution": "node",
+    "lib": [ "esnext" ],
+    "types": [ "node" ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@lib/*": ["src/lib/*"],
+      "@database/*": ["src/database/*"],
+      "@schemas/*": ["src/database/schemas/*"],
+      "@controllers/*": ["src/controllers/*"],
+      "@middlewares/*": ["src/middleware/*"],
+      "@router/*": ["src/router/*"]
+    },
+    "jsx": "react",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "composite": true
+  },
+  "files": ["./types/express.d.ts"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "src/**/*.cjs",
+    "src/database/config/config.cjs",
+    "src/mails/VerifyAccount.jsx",
+    "src/index.mts"
+, "src/database/migrations/20240925025414-create-user.cjs", "src/lib/scripts/generateMigration.Cjs"  ]
+}

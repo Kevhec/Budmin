@@ -1,0 +1,11 @@
+Un presupuesto y subcategorías
+
+El presupuesto se encargue de gestionar los ingresos y gastos, estos deben estar separados
+
+Tener la plata como un valor
+
+el ingreso se puede mezclar con el gasto
+
+Las subcategorías tendrían muchos gastos, un gasto sólo vive en una subcategoría
+
+Que el gasto o ingreso se relacionen directamente con el presupuesto

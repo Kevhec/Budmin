@@ -1,0 +1,456 @@
+{
+  "category": {
+    "general": "General",
+    "housing": "Housing",
+    "groceries": "Groceries",
+    "transport": "Transport",
+    "entertainment": "Entertainment",
+    "eating_out": "Eating out",
+    "health": "Health",
+    "self_care": "Personal care",
+    "clothing": "Clothing",
+    "debts_payment": "Debt payments",
+    "savings_and_investments": "Savings and investments",
+    "education": "Education",
+    "presents": "Gifts",
+    "donations": "Donations",
+    "insurance": "Insurance",
+    "subscriptions": "Subscriptions",
+    "trips": "Trips",
+    "pets": "Pets",
+    "child_care": "Child care",
+    "debts": "Debts",
+    "public_services": "Public services",
+    "taxes": "Taxes",
+    "car_maintenance": "Car maintenance",
+    "home_repairs": "Home repairs",
+    "gym": "Gym",
+    "electronics": "Electronics",
+    "bank_commissions": "Bank commissions",
+    "salary": "Salary",
+    "investments_income": "Investment income",
+    "bonuses": "Bonuses",
+    "freelance": "Freelance",
+    "rent": "Rent",
+    "none": "Uncategorized",
+    "unnamed": "Unnamed category"
+  },
+  "app": {
+    "header": {
+      "greeting": "Hi!"
+    },
+    "sidebarSheet": {
+      "trigger": "Open menu",
+      "title": "App menu",
+      "description": "Navigate through Budmin"
+    },
+    "userMenu": {
+      "label": "My account",
+      "profile": "Profile",
+      "darkMode": "Dark mode",
+      "options": "Options",
+      "signOut": "Sign out"
+    },
+    "navigation": {
+      "dashboard": "Dashboard",
+      "budgets": "Budgets",
+      "transactions": "Transactions"
+    }
+  },
+  "creation": {
+    "trigger": "Create element",
+    "transactionTrigger": "Transaction",
+    "modal": {
+      "transaction": {
+        "title": "Create transaction"
+      },
+      "budget": {
+        "title": "Create budget"
+      }
+    },
+    "budgetTrigger": "Budget"
+  },
+  "footer": {
+    "credits": "Budmin by"
+  },
+  "dashboard": {
+    "generalResume": {
+      "labels": {
+        "totalBalance": "Total balance",
+        "income": "Income",
+        "expense": "Expenses"
+      }
+    },
+    "categoryBalanceGraph": {
+      "labels": {
+        "income": "Income",
+        "expense": "Expenses"
+      },
+      "graphOf": "Chart of"
+    },
+    "recentTransactions": {
+      "heading": "Last transactions"
+    },
+    "recentBudgets": {
+      "heading": "Recent budgets"
+    },
+    "monthlyBalanceGraph": {
+      "graph": {
+        "title": "How Your Money Is Spent",
+        "description": "Select which data you want to view annually: total balance, expenses, or income."
+      }
+    }
+  },
+  "helpers": {
+    "in": "in",
+    "noData": "No data",
+    "seeMore": "See more",
+    "per": "per",
+    "total": "Total",
+    "time": {
+      "day": {
+        "singular": "Day",
+        "plural": "Days"
+      },
+      "week": {
+        "singular": "Week",
+        "plural": "Weeks"
+      },
+      "month": {
+        "singular": "Month",
+        "plural": "Months"
+      },
+      "semester": {
+        "singular": "Semester",
+        "plural": "Semesters"
+      },
+      "year": {
+        "singular": "Year",
+        "plural": "Years"
+      },
+      "weekdays": {
+        "0": "sunday",
+        "1": "monday",
+        "2": "tuesday",
+        "3": "wednesday",
+        "4": "thursday",
+        "5": "friday",
+        "6": "saturday",
+        "monday": {
+          "full": "Monday",
+          "single": "M"
+        },
+        "tuesday": {
+          "full": "Tuesday",
+          "single": "T"
+        },
+        "wednesday": {
+          "full": "Wednesday",
+          "single": "W"
+        },
+        "thursday": {
+          "full": "Thursday",
+          "single": "R"
+        },
+        "friday": {
+          "full": "Friday",
+          "single": "F"
+        },
+        "saturday": {
+          "full": "Saturday",
+          "single": "S"
+        },
+        "sunday": {
+          "full": "Sunday",
+          "single": "U"
+        }
+      },
+      "months": {
+        "0": "January",
+        "1": "February",
+        "2": "March",
+        "3": "April",
+        "4": "May",
+        "5": "June",
+        "6": "July",
+        "7": "August",
+        "8": "September",
+        "9": "October",
+        "10": "November",
+        "11": "December",
+        "January": {
+          "full": "January",
+          "short": "Jan"
+        },
+        "February": {
+          "full": "February",
+          "short": "Feb"
+        },
+        "March": {
+          "full": "March",
+          "short": "Mar"
+        },
+        "April": {
+          "full": "April",
+          "short": "Apr"
+        },
+        "May": {
+          "full": "May",
+          "short": "May"
+        },
+        "June": {
+          "full": "June",
+          "short": "Jun"
+        },
+        "July": {
+          "full": "July",
+          "short": "Jul"
+        },
+        "August": {
+          "full": "August",
+          "short": "Aug"
+        },
+        "September": {
+          "full": "September",
+          "short": "Sep"
+        },
+        "October": {
+          "full": "October",
+          "short": "Oct"
+        },
+        "November": {
+          "full": "November",
+          "short": "Nov"
+        },
+        "December": {
+          "full": "December",
+          "short": "Dec"
+        }
+      },
+      "hour": {
+        "singular": "Hour",
+        "plural": "Hours"
+      },
+      "minute": {
+        "singular": "Minute",
+        "plural": "Minutes"
+      },
+      "period": "Period"
+    },
+    "of": "of",
+    "never": "Never",
+    "the": "the",
+    "selected": {
+      "singular": "Selected",
+      "feminine": {
+        "plural": "selected"
+      }
+    },
+    "edit": "edit",
+    "delete": "delete",
+    "hide": "hide"
+  },
+  "common": {
+    "transaction": {
+      "singular": "Transaction",
+      "plural": "Transactions"
+    },
+    "income": {
+      "singular": "Income",
+      "plural": "Incomes"
+    },
+    "expense": {
+      "singular": "Expense",
+      "plural": "Expenses"
+    },
+    "category": {
+      "singular": "Category",
+      "plural": "Categories"
+    },
+    "start": "Start",
+    "end": "End",
+    "ends": "Ends",
+    "starts": "Starts",
+    "year": "Year",
+    "balance": "Balance",
+    "totalBalance": "Total balance",
+    "save": "Save",
+    "create": "Create",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "recurrence": "Recurrencia",
+    "stop": "Stop",
+    "endDate": "End date",
+    "row": "row",
+    "page": "page",
+    "amount": "Amount"
+  },
+  "budgetResumeCard": {
+    "valueDescription": "Out of an initial value of",
+    "transactionsAmount": "Associated transactions"
+  },
+  "creationDialog": {
+    "description": "Create a new"
+  },
+  "confirmDialog": {
+    "alerts": {
+      "save": {
+        "title": "Unsaved Changes"
+      }
+    }
+  },
+  "confirmationDialog": {
+    "alerts": {
+      "save": {
+        "message": "You have unsaved changes, do you want to proceed?"
+      }
+    }
+  },
+  "forms": {
+    "recurrence": {
+      "description": "Define how your element creation should repeat.",
+      "inputs": {
+        "steps": "Repeat every",
+        "type": "Recurrence type",
+        "time": "Time",
+        "repeatOn": "Repeat on",
+        "monthSelect": {
+          "label": "Day of the month",
+          "options": {
+            "exact": "Every month, on day",
+            "ordinal": "Every month on the"
+          }
+        },
+        "endDate": {
+          "label": "Select a date",
+          "description": "When do you want to end this subscription?"
+        },
+        "defaults": {
+          "label": "Repeats",
+          "description": "Is it recurrent?",
+          "options": {
+            "none": "Unique event",
+            "daily": "Everyday",
+            "weekly": "Every week, the",
+            "monthly": "Every month, the",
+            "yearly": "Yearly, the",
+            "custom": "Custom..."
+          }
+        }
+      }
+    },
+    "transaction": {
+      "inputs": {
+        "type": {
+          "label": "Type",
+          "placeholder": "Type",
+          "description": "Transaction type"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "Entertainment",
+          "description": "Describe your transaction"
+        },
+        "amount": {
+          "label": "Amount",
+          "placeholder": "$100,000",
+          "description": "How much money?"
+        },
+        "startDate": {
+          "label": "Date",
+          "description": "Select your transaction date"
+        },
+        "category": {
+          "label": "Category",
+          "placeholder": "Search for a category...",
+          "notFound": "No category found",
+          "description": "Select a category"
+        },
+        "budget": {
+          "label": "Budget",
+          "button": "Select a budget",
+          "placeholder": "Search for a budget...",
+          "notFound": "No budget found",
+          "description": "Is your transaction part of a budget?"
+        }
+      }
+    },
+    "budget": {
+      "inputs": {
+        "description": {
+          "label": "Description",
+          "description": "Describe your budget",
+          "placeholder": "Example: Salary"
+        },
+        "totalAmount": {
+          "label": "Assigned Amount",
+          "placeholder": "$100,000",
+          "description": "How much do you have budgeted?"
+        },
+        "startDate": {
+          "label": "Start date",
+          "placeholder": "Select a date",
+          "description": "When does it start?"
+        },
+        "endDate": {
+          "label": "End date",
+          "placeholder": "Select a date",
+          "description": "Whe does it ends?"
+        }
+      }
+    }
+  },
+  "ordinals": {
+    "1": "first",
+    "2": "second",
+    "3": "third",
+    "4": "fourth",
+    "5": "fifth"
+  },
+  "When does it start?": "¿Cuándo inicia?",
+  "history": {
+    "datatable": {
+      "controls": {
+        "view": "View",
+        "pagination": {
+          "perPage": "Transactions per page",
+          "firstPage": "Go to first page",
+          "prevPage": "Go to previous page",
+          "nextPage": "Go to next page",
+          "lastPage": "Go to last page"
+        }
+      },
+      "columns": {
+        "date": "Date",
+        "description": "Description",
+        "amount": "Amount",
+        "type": "Type",
+        "category_name": "Category",
+        "budgets": "Budget",
+        "actions": "Actions"
+      },
+      "actions": {
+        "trigger": "Open menu",
+        "label": "Actions"
+      }
+    },
+    "heading": "Transaction Record"
+  },
+  "alerts": {
+    "deletion": {
+      "transaction": {
+        "title": "Delete transaction",
+        "message": {
+          "partOne": "Transaction",
+          "partTwo": "will be deleted, this action cannot be reverted."
+        }
+      }
+    }
+  },
+  "budgets": {
+    "dialogDescription": "Extended data about your budget",
+    "dialog": {
+      "graphHeading": "Budget Evolution"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@import '@budmin/tailwind-config';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-inter: "Inter", sans-serif;
+  --font-open-sans: "Open Sans", sans-serif;
+}
