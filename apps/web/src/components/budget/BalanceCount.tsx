@@ -18,11 +18,13 @@ export default function BalanceCount({
 }: Props) {
   const { t } = useTranslation();
 
-  const containerClasses = cn('grid h-full grid-rows-2 p-0 items-center', {
+  const displayNumber = netAmount || totalAmount;
+
+  const containerClasses = cn('flex flex-col h-full justify-center items-center', {
     'w-full text-center': variant === 'expanded',
   }, className);
 
-  const netAmountClasses = cn('font-openSans font-bold text-sm lg:text-xl', {
+  const netAmountClasses = cn('font-openSans font-bold text-sm md:text-2xl xl:text-3xl', {
     'text-2xl': variant === 'expanded',
   });
 
@@ -32,17 +34,30 @@ export default function BalanceCount({
 
   return (
     <div className={containerClasses}>
-      <Typography className={netAmountClasses}>
+      <Typography className={netAmountClasses} title={String(displayNumber)}>
         {
-          formatMoney(
-            netAmount || totalAmount,
-          )
+          formatMoney({
+            number: displayNumber,
+            locale: 'es-CO',
+            options: {
+              notation: displayNumber > 10000000 ? 'compact' : 'standard',
+            },
+          })
         }
       </Typography>
       <Typography className="text-xs lg:text-sm">
         {t('budgetResumeCard.valueDescription')}
         {' '}
-        <Typography variant="span" className={totalAmountClasses}>{formatMoney(totalAmount)}</Typography>
+        <Typography variant="span" className={totalAmountClasses} title={String(totalAmount)}>
+          {
+            formatMoney({
+              number: totalAmount,
+              options: {
+                notation: totalAmount > 10000000 ? 'compact' : 'standard',
+              },
+            })
+          }
+        </Typography>
       </Typography>
     </div>
   );

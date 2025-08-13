@@ -4,7 +4,7 @@ import TransactionResumeCard from '@/components/TransactionResumeCard';
 import useTransactions from '@/hooks/useTransactions';
 import { NavLink } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { Separator } from '@budmin/ui';
+import { Separator } from '@budmin/ui/shadcn/separator';
 import {
   Typography,
 } from '@budmin/ui/internal/Typography';

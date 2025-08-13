@@ -12,8 +12,11 @@ import { useEffect } from 'react';
 import {
   Popover, PopoverContent, PopoverTrigger, Input,
   Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage,
-  Card, CardContent, CardDescription, CardHeader, CardTitle, CalendarWithYear, Button,
+  Card, CardContent, CardDescription, CardHeader, CardTitle, Button,
 } from '@budmin/ui';
+import {
+  Calendar,
+} from '@budmin/ui/shadcn/calendar';
 import {
   Typography,
 } from '@budmin/ui/internal/Typography';
@@ -126,28 +129,27 @@ export default function SignUp() {
                             <Button
                               variant="outline"
                               className={cn(
-                                'w-full pl-3 text-left font-normal row-start-2',
+                                'w-[240px] pl-3 text-left font-normal',
                                 !field.value && 'text-muted-foreground',
                               )}
                             >
                               {field.value ? (
                                 format(field.value, 'long')
                               ) : (
-                                <span>Selecciona una fecha</span>
+                                <span>Pick a date</span>
                               )}
                               <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
-                          <CalendarWithYear
-                            locale={es}
+                          <Calendar
                             mode="single"
-                            captionLayout="dropdown-buttons"
                             selected={field.value}
                             onSelect={field.onChange}
-                            fromYear={new Date().getFullYear() - 100}
-                            toYear={new Date().getFullYear()}
+                            disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+                            captionLayout="dropdown"
+                            locale={es}
                           />
                         </PopoverContent>
                       </Popover>

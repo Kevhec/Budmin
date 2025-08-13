@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { format } from '@formkit/tempo';
 import { CalendarClock, Clock } from 'lucide-react';
-import React from 'react';
 import { cn } from '@/lib/utils';
 import { Separator, Typography } from '@budmin/ui';
 
@@ -21,40 +20,36 @@ export default function DateRange({
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
 
-  const OuterContainer = variant === 'normal'
-    ? 'div'
-    : React.Fragment;
-
-  const outerContainerClasses = cn({
+  const outerContainerClasses = cn('h-min', {
     [`flex items-center justify-between gap-4 ${className}`]: variant === 'normal',
   });
 
   const innerContainerClasses = cn(
-    'relative text-sm grow flex flex-col md:gap-1',
+    'relative text-sm grow flex flex-col md:gap-1 items-start',
     {
-      [`grid grid-cols-2 text-center ${className}`]: variant === 'expanded',
+      [`grid grid-cols-2 text-center md:gap-3 ${className}`]: variant === 'expanded',
     },
   );
 
   const dateElementClasses = cn(
     'text-xs flex gap-2 justify-between lg:justify-start lg:gap-4',
     {
-      'flex flex-col gap-2 md:gap-0 z-20': variant === 'expanded',
+      'flex flex-col gap-2 md:gap-4 z-20': variant === 'expanded',
     },
   );
 
   return (
-    <OuterContainer className={outerContainerClasses}>
+    <div className={outerContainerClasses}>
       {
         variant === 'normal' && (
-          <CalendarClock className="w-4 h-4" />
+          <CalendarClock className="md:hidden xl:block w-4 h-4" />
         )
       }
       <div className={innerContainerClasses}>
         <div className={dateElementClasses}>
           <Typography className="text-sm">
             {t('common.starts')}
-            :
+            {variant === 'normal' && (':')}
           </Typography>
           <Typography className="text-sm font-semibold">
             {format(startDate, 'short', currentLanguage)}
@@ -71,13 +66,13 @@ export default function DateRange({
         <div className={dateElementClasses}>
           <Typography className="text-sm">
             {t('common.ends')}
-            :
+            {variant === 'normal' && (':')}
           </Typography>
           <Typography className="text-sm font-semibold">
             {format(endDate, 'short', currentLanguage)}
           </Typography>
         </div>
       </div>
-    </OuterContainer>
+    </div>
   );
 }

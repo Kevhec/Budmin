@@ -6,9 +6,12 @@ import {
 import { cn, nthDay } from '@/lib/utils';
 import { format } from '@formkit/tempo';
 import { useTranslation } from 'react-i18next';
-import { type Period } from '@budmin/ui';
 import {
-  TimePickerInput, TimePeriodSelect,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from '@budmin/ui/shadcn/select';
+import { Button } from '@budmin/ui/shadcn/button';
+import { RadioGroup, RadioGroupItem } from '@budmin/ui/shadcn/radio-group';
+import {
   Dialog,
   DialogClose,
   DialogContent,
@@ -17,9 +20,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  FormControl, FormField, FormItem, FormLabel, FormMessage, Input,
-  Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Button, RadioGroup, RadioGroupItem,
-} from '@budmin/ui';
+} from '@budmin/ui/shadcn/dialog';
+import { type Period } from '@budmin/ui/internal/timePicker/time-picker-utils';
+import {
+  TimePickerInput,
+  TimePeriodSelect,
+} from '@budmin/ui/internal/timePicker/index';
+import {
+  FormControl, FormField, FormItem, FormLabel, FormMessage,
+} from '@budmin/ui/shadcn/form';
+import {
+  Input,
+} from '@budmin/ui/shadcn/input';
 import ConcurrenceEndDate from '../ConcurrenceEndDate';
 
 interface Props<T extends FieldValues = FieldValues> {
@@ -168,9 +180,7 @@ export default function ConcurrenceDialog<T extends FieldValues>({
       <DialogTrigger
         asChild
       >
-        <>
-          {trigger}
-        </>
+        {trigger}
       </DialogTrigger>
       <DialogContent className="max-w-md w-[calc(100%-2rem)] rounded-sm">
         <DialogHeader>

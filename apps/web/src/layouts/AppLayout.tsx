@@ -60,7 +60,7 @@ export default function AppLayout() {
   }
 
   const containerClasses = cn(
-    'md:h-(--height) w-full relative overflow-y-hidden',
+    'w-full relative h-full',
   );
 
   const mainElementClasses = cn(
@@ -107,18 +107,18 @@ export default function AppLayout() {
             </aside>
             <div className="flex flex-col w-full md:max-h-screen">
               <Header ref={headerRef} />
-              <ContainerComponent
+              <ScrollArea
                 className={containerClasses}
-                style={
+                /* style={
                   {
                     '--height': `${containerHeight}px`,
                   } as React.CSSProperties
-                }
+                } */
               >
                 <main className={mainElementClasses}>
                   <Outlet />
                 </main>
-              </ContainerComponent>
+              </ScrollArea>
             </div>
           </div>
         </BudgetProvider>
