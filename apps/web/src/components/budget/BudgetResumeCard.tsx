@@ -65,7 +65,7 @@ export default function BudgetResumeCard({
         </div>
         {
           variant === 'expanded' && (
-            <div className="flex justify-between py-2 md:p-0">
+            <div className="flex justify-between gap-1 py-2 md:p-0">
               <Typography className="text-sm">
                 {`${budget.transactionsCount} ${t('budgetResumeCard.transactionsAmount')}`}
               </Typography>

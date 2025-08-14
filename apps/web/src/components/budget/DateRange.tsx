@@ -32,9 +32,9 @@ export default function DateRange({
   );
 
   const dateElementClasses = cn(
-    'text-xs flex gap-2 justify-between lg:justify-start lg:gap-4',
+    'text-xs flex gap-2 justify-between lg:justify-start',
     {
-      'flex flex-col gap-2 md:gap-4 z-20': variant === 'expanded',
+      'flex flex-col md:gap-4 z-20': variant === 'expanded',
     },
   );
 

@@ -20,11 +20,11 @@ export default function BalanceCount({
 
   const displayNumber = netAmount || totalAmount;
 
-  const containerClasses = cn('flex flex-col h-full justify-center items-center', {
-    'w-full text-center': variant === 'expanded',
+  const containerClasses = cn('flex flex-col h-full justify-center items-center text-center md:text-left', {
+    'w-full': variant === 'expanded',
   }, className);
 
-  const netAmountClasses = cn('font-openSans font-bold text-sm md:text-2xl xl:text-3xl', {
+  const netAmountClasses = cn('font-openSans w-full font-bold text-base md:text-2xl xl:text-3xl', {
     'text-2xl': variant === 'expanded',
   });
 
@@ -45,7 +45,7 @@ export default function BalanceCount({
           })
         }
       </Typography>
-      <Typography className="text-xs lg:text-sm">
+      <Typography className="text-xs w-full lg:text-sm">
         {t('budgetResumeCard.valueDescription')}
         {' '}
         <Typography variant="span" className={totalAmountClasses} title={String(totalAmount)}>

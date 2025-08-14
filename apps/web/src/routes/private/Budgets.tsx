@@ -159,7 +159,7 @@ export default function Budgets() {
   }, [selectedBudget, budgets, getDetailedBudgetData]);
 
   return (
-    <div className="h-full md:gap-4 md:grid md:grid-cols-2 md:grid-rows-2 lg:grid-cols-[2fr_3fr]">
+    <div className="h-full md:gap-4 md:grid md:grid-cols-2 md:grid-rows-2 lg:grid-cols-[3fr_4fr]">
       {/* Budgets list column */}
       <div className="bg-white rounded-md h-full md:pb-20 md:row-span-2 md:col-span-1">
         <Typography variant="h2" className="p-4">
@@ -178,7 +178,9 @@ export default function Budgets() {
                     budget={budget}
                     variant="expanded"
                     onClick={handleBudgetSelection}
-                    className="md:border-solid md:border-slate-300"
+                    className={cn('md:border-solid md:border-slate-300', {
+                      'bg-gray-200 hover:bg-gray-200': budget.id === selectedBudget?.id,
+                    })}
                   />
                   {
                       i < arr.length - 1 && (
@@ -196,50 +198,50 @@ export default function Budgets() {
           selectedBudget && (
             <>
               {/*  */}
-              <div className="bg-white p-4 pl-6 rounded-sm mb-4 relative grid grid-rows-[min-content_1fr] gap-1 md:mb-0 lg:grid-cols-[min-content_1fr] lg:grid-rows-1">
+              <div className="bg-white p-4 pl-6 rounded-sm mb-4 md:mb-0 relative flex flex-col">
                 <RemainingIndicator
                   totalAmount={budgetAmountData?.totalAmount || 0}
                   netAmount={budgetAmountData?.netAmount || 0}
                   variant="expanded"
                   className="xl:top-0 xl:left-0 xl:w-2 translate-y-0 xl:translate-x-0 xl:h-full"
                 />
-                <div className="flex items-center gap-4 md:justify-center md:text-center md:gap-6 lg:flex-col lg:justify-start">
-                  <div className="flex flex-col gap-0.5">
-                    <Typography variant="h2" className="text-center mb-1 xl:text-start xl:mb-2">
-                      {selectedBudget.name}
-                    </Typography>
+                <Typography variant="h2" className="text-center mb-1 xl:text-start xl:mb-2">
+                  {selectedBudget.name}
+                </Typography>
+                <div className="flex grow gap-4 md:flex-col lg:flex-row overflow-hidden">
+                  <div className="md:pt-4 flex lg:block md:items-center md:justify-center md:gap-4 lg:space-y-3">
                     <BalanceCount
                       totalAmount={budgetAmountData?.totalAmount || 0}
                       netAmount={budgetAmountData?.netAmount || 0}
                       variant={isSmallDesktop ? 'normal' : 'expanded'}
-                      className="xl:h-auto xl:my-0 xl:mb-4"
+                      className="xl:my-0 xl:mb-4 md:w-fit h-auto text-center"
+                    />
+                    <Separator orientation="vertical" className="lg:hidden" decorative />
+                    <DateRange
+                      startDate={selectedBudget.startDate}
+                      endDate={selectedBudget.endDate}
+                      variant={isDesktopGeneral ? 'expanded' : 'normal'}
+                      className="mb-4 md:mb-0"
                     />
                   </div>
-                  <Separator orientation="vertical" className="lg:hidden" decorative />
-                  <DateRange
-                    startDate={selectedBudget.startDate}
-                    endDate={selectedBudget.endDate}
-                    variant={isDesktopGeneral ? 'expanded' : 'normal'}
-                    className="mb-4 md:mb-0"
-                  />
-                </div>
-                <div className="overflow-hidden grow mt-2">
-                  {
-                    chartData.length > 0 ? (
-                      <BudgetChart
-                        chartConfig={budgetChartConfig}
-                        chartData={chartData}
-                        budgetAmountData={budgetAmountData}
-                        className="h-full w-full"
-                      />
-                    ) : (
-                      <div className="border-border h-full flex items-center">
-                        <Typography className="text-center w-full">
-                          {t('helpers.noData')}
-                        </Typography>
-                      </div>
-                    )
-                  }
+                  <div className="flex grow overflow-hidden bg-gray-100 rounded-sm p-2">
+                    {
+                      chartData.length > 0 ? (
+                        <BudgetChart
+                          chartConfig={budgetChartConfig}
+                          chartData={chartData}
+                          budgetAmountData={budgetAmountData}
+                          className="w-full"
+                        />
+                      ) : (
+                        <div className="border-border h-full w-full flex items-center">
+                          <Typography className="text-center w-full">
+                            {t('helpers.noData')}
+                          </Typography>
+                        </div>
+                      )
+                    }
+                  </div>
                 </div>
               </div>
               {/* TODO: Check section heading to avoid it scrolling */}
