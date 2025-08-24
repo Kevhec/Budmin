@@ -13,6 +13,7 @@ import {
   Typography,
 } from '@budmin/ui/internal/Typography';
 import { type ChartConfig } from '@budmin/ui';
+import { useDashboard } from '@/context/DashboardProvider';
 
 const tabsDefaultValue = 'income';
 
@@ -29,6 +30,7 @@ export default function CategoryBalanceGraph() {
       label: t('common.category.plural'),
     },
   });
+  const { year, month } = useDashboard();
 
   const currentLanguage = i18n.language;
 
@@ -79,15 +81,15 @@ export default function CategoryBalanceGraph() {
   }, [monthBalance, currentTab, t]);
 
   useEffect(() => {
-    updateBalance();
-  }, [recentTransactions, updateBalance]);
+    updateBalance({ year, month });
+  }, [recentTransactions, year, month, updateBalance]);
 
   const onTabChange = (value: string) => {
     setCurrentTab(value);
   };
 
   return (
-    <section className="md:col-span-10 xl:row-span-2 xl:col-start-11">
+    <section className="md:col-span-10 md:row-start-3 xl:row-span-3 xl:col-start-11">
       <Tabs
         defaultValue={tabsDefaultValue}
         onValueChange={onTabChange}

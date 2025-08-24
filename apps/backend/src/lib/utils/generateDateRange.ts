@@ -31,7 +31,7 @@ export default function generateDateRange({ fromDate, toDate, untilToday }: Para
     start = new Date(fromYear, fromMonth - 1, 1);
 
     if (!parsedTo) {
-      // If not "to" date do and if untilToday is true
+      // If not "to" date and if untilToday is true
       // go to today date else go to last day of same month
       end = untilToday ? new Date() : new Date(start);
       end.setMonth(end.getMonth() + 1, 0);

@@ -3,7 +3,7 @@ import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import type { CreationParamsUnion, SimplifiedConcurrence } from '@/types';
 import i18next from '@/i18n';
-import { concurrenceInit } from './constants';
+import { concurrenceInit, dateStringRegex } from './constants';
 
 const { t } = i18next;
 
@@ -122,9 +122,15 @@ export function getModeValue(editMode: boolean | undefined) {
   };
 }
 
-export function isValidDate(dateString: string) {
-  const date = new Date(dateString);
-  return !Number.isNaN(date.getTime());
+export function isValidDate(date: string | Date) {
+  let dateObj;
+
+  if (date instanceof Date) {
+    dateObj = date;
+  } else {
+    dateObj = new Date(date);
+  }
+  return !Number.isNaN(dateObj.getTime());
 }
 
 export function updateArrayItem<T extends { id: string }>(arr: T[], id: string, item: T) {
@@ -175,4 +181,33 @@ export function keywordsFilter(_: string, search: string, keywords?: string[]) {
 
 export function percentageChange(initialValue: number, finalValue: number) {
   return (finalValue / initialValue) * 100;
+}
+
+interface FormatMonthDateParams {
+  year?: number | null;
+  month?: number | null;
+  date?: string;
+}
+
+export function formatYearMonthDate({ year, month, date }: FormatMonthDateParams = {}) {
+  // TODO: Standardize month usage to use zero index or one for api requests and DOCUMENT
+  const newMonth = typeof month === 'number' ? String(month + 1).padStart(2, '0') : undefined;
+  const newYear = year ? String(year).padStart(4, '0') : undefined;
+
+  if (date) {
+    if (!year && !month) throw new Error('If date is provided at least year or month must be provided too');
+
+    const isDateWellFormatted = dateStringRegex.test(date);
+    if (!isDateWellFormatted) throw new Error('Date should be in the format YYYY-MM');
+
+    const [prevYear, prevMonth] = date.split('-');
+
+    return `${newYear || prevYear}-${newMonth || prevMonth}`;
+  }
+
+  const currentDateObject = new Date();
+  const currentYear = String(currentDateObject.getFullYear()).padStart(4, '0');
+  const currentMonth = String(currentDateObject.getMonth() + 1).padStart(2, '0');
+
+  return `${newYear || currentYear}-${newMonth || currentMonth}`;
 }

@@ -56,8 +56,7 @@ export default function TransactionResumeCard({
           <Typography className={amountClasses}>
             {/* TODO: Add user preference: Currency. As third param */}
             {
-              formatMoney({
-                number: amount || 0,
+              formatMoney(amount || 0, {
                 locale: currentLanguage,
               })
             }

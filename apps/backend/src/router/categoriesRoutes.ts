@@ -29,6 +29,7 @@ router.route('/')
     getAllCategories,
   );
 
+// TODO: Validate data, create schema
 router.get(
   '/balance/',
   authenticate,

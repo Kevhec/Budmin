@@ -2,6 +2,7 @@ import { formatMoney } from '@/lib/formatNumber';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { Typography } from '@budmin/ui';
+import { Textfit } from 'react-textfit';
 
 interface Props {
   totalAmount: number
@@ -20,13 +21,11 @@ export default function BalanceCount({
 
   const displayNumber = netAmount || totalAmount;
 
-  const containerClasses = cn('flex flex-col h-full justify-center items-center text-center md:text-left', {
+  const containerClasses = cn('flex flex-col h-full items-center text-left', {
     'w-full': variant === 'expanded',
   }, className);
 
-  const netAmountClasses = cn('font-openSans w-full font-bold text-base md:text-2xl xl:text-3xl', {
-    'text-2xl': variant === 'expanded',
-  });
+  const netAmountClasses = cn('font-openSans w-full font-bold text-[length:inherit]');
 
   const totalAmountClasses = cn('block text-xs lg:text-sm', {
     inline: variant === 'expanded',
@@ -34,24 +33,24 @@ export default function BalanceCount({
 
   return (
     <div className={containerClasses}>
-      <Typography className={netAmountClasses} title={String(displayNumber)}>
-        {
-          formatMoney({
-            number: displayNumber,
-            locale: 'es-CO',
-            options: {
-              notation: displayNumber > 10000000 ? 'compact' : 'standard',
-            },
-          })
-        }
-      </Typography>
+      <Textfit mode="multi" max={36} className="w-full">
+        <Typography className={netAmountClasses} title={String(displayNumber)}>
+          {
+            formatMoney(displayNumber, {
+              locale: 'es-CO',
+              options: {
+                notation: displayNumber > 10000000 ? 'compact' : 'standard',
+              },
+            })
+          }
+        </Typography>
+      </Textfit>
       <Typography className="text-xs w-full lg:text-sm">
         {t('budgetResumeCard.valueDescription')}
         {' '}
         <Typography variant="span" className={totalAmountClasses} title={String(totalAmount)}>
           {
-            formatMoney({
-              number: totalAmount,
+            formatMoney(totalAmount, {
               options: {
                 notation: totalAmount > 10000000 ? 'compact' : 'standard',
               },

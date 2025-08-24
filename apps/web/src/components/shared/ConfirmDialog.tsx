@@ -8,7 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogPortal,
   AlertDialogTitle,
-} from '@budmin/ui';
+} from '@budmin/ui/shadcn/alert-dialog';
 import { useTranslation } from 'react-i18next';
 
 interface Props {

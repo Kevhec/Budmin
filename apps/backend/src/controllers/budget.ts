@@ -130,7 +130,7 @@ async function getAllBudgets(
 
   if (month) {
     // If month is provided use it for filtering, formatted as YYYY-MM
-    const dateRange = generateDateRange({ fromDate: strMonth });
+    const dateRange = generateDateRange({ fromDate: strMonth, untilToday: true });
 
     if (dateRange) {
       const [start, end] = dateRange;
@@ -138,6 +138,7 @@ async function getAllBudgets(
       whereClause.createdAt = {
         [Op.between]: [start, end],
       };
+      console.log(whereClause)
     }
   }
 
@@ -168,6 +169,7 @@ async function getAllBudgets(
           ],
         ],
       },
+      // TODO: Allow ordering by start date too
       order: [['createdAt', 'DESC']],
     });
 

@@ -7,15 +7,15 @@ import type {
 } from '@/types';
 import { TransactionActionType } from '@/types';
 import axiosClient from '@/config/axios';
-import getBalance from '@/lib/balance/getBalance';
 import formatTransactionData from '@/lib/transaction/formatTransactionData';
 import getPaginationOptions from '@/lib/transaction/getPaginationOptions';
+import getBalance from '@/lib/balance/getBalance';
 import { initialRecentTransactionsState, initialTransactionState } from './transactionReducer';
 
 // TODO! When there are not paginated transaction in the history page,
 // TODO! it start making requests in an infinite loop
 
-async function syncRecentTransactions(dispatch: Dispatch<TransactionAction>) {
+async function syncRecentTransactions(dispatch: Dispatch<TransactionAction>, date?: Date | string) {
   dispatch({
     type: TransactionActionType.SET_LOADING,
     payload: true,
@@ -26,11 +26,10 @@ async function syncRecentTransactions(dispatch: Dispatch<TransactionAction>) {
       page: 1,
       limit: 4,
       include: 'budget,category,concurrence',
+      date,
     });
 
     const recentTransactions = response.data;
-
-    console.log({ recentTransactions });
 
     if (recentTransactions) {
       dispatch({
@@ -106,8 +105,6 @@ async function createTransaction(
       type: TransactionActionType.CREATE_TRANSACTION,
       payload: newTransaction,
     });
-
-    console.log({ newTransaction });
 
     if (currentPage !== 1) {
       syncPaginatedTransactions(dispatch, getPaginationOptions({

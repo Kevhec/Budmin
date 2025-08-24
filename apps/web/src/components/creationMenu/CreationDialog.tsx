@@ -1,20 +1,29 @@
 import useTransactions from '@/hooks/useTransactions';
 import type {
-  Budget, CreateBudgetParams, CreateTransactionParams, Transaction,
+  Budget,
+  CreateBudgetParams,
+  CreateTransactionParams,
+  Transaction,
 } from '@/types';
 import useBudgets from '@/hooks/useBudgets';
-import {
-  type ComponentType,
-  useEffect, useState,
-} from 'react';
+import { type ComponentType, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import useAlert from '@/hooks/useAlert';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@budmin/ui/shadcn/button';
+import { ScrollArea } from '@budmin/ui/shadcn/scroll-area';
 import {
-  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,
-  Button, ScrollArea,
-} from '@budmin/ui';
-import TransactionForm, { type TransactionFormProps } from './forms/TransactionForm';
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@budmin/ui/shadcn/dialog';
+import TransactionForm, {
+  type TransactionFormProps,
+} from './forms/TransactionForm';
 import BudgetForm, { type BudgetFormProps } from './forms/BudgetForm';
 import ConfirmDialog from '../shared/ConfirmDialog';
 
@@ -28,26 +37,28 @@ interface Props {
 }
 
 const formMapping: {
-  transaction: ComponentType<TransactionFormProps>;
-  budget: ComponentType<BudgetFormProps>;
+  transaction: ComponentType<TransactionFormProps>
+  budget: ComponentType<BudgetFormProps>
 } = {
   transaction: TransactionForm,
   budget: BudgetForm,
 };
 
 function CreationDialog({
-  type, triggerLabel, item, editMode, modalTitle, triggerClassname, ...props
+  type,
+  triggerLabel,
+  item,
+  editMode,
+  modalTitle,
+  triggerClassname,
+  ...props
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [isFormDirty, setIsFormDirty] = useState(false);
   const { createTransaction, updateTransaction } = useTransactions();
   const { createBudget } = useBudgets();
   const {
-    isAlertOpen,
-    confirm,
-    setIsAlertOpen,
-    showAlert,
-    handleConfirm,
+    isAlertOpen, confirm, setIsAlertOpen, showAlert, handleConfirm,
   } = useAlert();
   const { t } = useTranslation();
 
@@ -132,13 +143,7 @@ function CreationDialog({
           </ScrollArea>
           <DialogFooter className="p-6 pt-0">
             <Button form={formId} type="submit">
-              {
-                editMode ? (
-                  t('common.save')
-                ) : (
-                  t('common.create')
-                )
-              }
+              {editMode ? t('common.save') : t('common.create')}
             </Button>
           </DialogFooter>
         </DialogContent>

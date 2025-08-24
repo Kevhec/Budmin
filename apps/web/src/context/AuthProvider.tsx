@@ -50,10 +50,6 @@ export function AuthProvider({ children }: Props) {
     signUpAction(dispatch, credentials);
   }, []);
 
-  useEffect(() => {
-    console.log(state.user);
-  }, [state.user]);
-
   const contextValue = useMemo<AuthContextType>(() => ({
     state,
     loginGuest,

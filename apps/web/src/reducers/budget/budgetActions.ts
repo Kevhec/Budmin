@@ -8,7 +8,10 @@ import axiosClient from '@/config/axios';
 import formatBudgetData from '@/lib/budget/formatBudgetData';
 import { initialBudgetState, initialRecentBudgetsState } from './budgetReducer';
 
-async function syncRecentBudgets(dispatch: Dispatch<BudgetAction>) {
+async function syncRecentBudgets(
+  dispatch: Dispatch<BudgetAction>,
+  date: Date | string = new Date(),
+) {
   dispatch({
     type: BudgetActionType.SET_LOADING,
     payload: true,
@@ -18,7 +21,7 @@ async function syncRecentBudgets(dispatch: Dispatch<BudgetAction>) {
     const response = await getPaginatedBudgets({
       page: 1,
       limit: 4,
-      date: new Date(),
+      date,
     });
 
     const recentBudgets = response.data;
@@ -52,7 +55,6 @@ async function getBudgets(
 
   try {
     const budgets = await getPaginatedBudgets();
-    console.log(budgets);
     const budgetsData = budgets?.data;
 
     if (budgetsData) {

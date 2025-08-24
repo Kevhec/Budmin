@@ -1,29 +1,36 @@
 import { format } from '@formkit/tempo';
 import axiosClient from '@/config/axios';
 import type { Budget, PaginatedApiResponse, PaginatedParams } from '@/types';
+import { dateStringRegex } from '../constants';
+import { isValidDate } from '../utils';
 
 async function getPaginatedBudgets(options?: PaginatedParams) {
   try {
-    let params: any;
+    const params: Record<string, any> = {};
 
     if (options) {
-      let validOffset = 0;
-      let validDate = new Date();
-      let validLimit: number | string = '';
-
       const { date, limit = 1, page = 1 } = options;
 
+      let validDate;
+      let validOffset = 0;
+      let validLimit: number | string = '';
+
       validOffset = (page - 1) * limit;
-      validDate = date || new Date();
+      // TODO: Fix this date type issue
       validLimit = limit;
 
-      const [year, month] = format(validDate || new Date(), 'YYYY-MM').split('-');
+      params.offset = validOffset;
+      params.limit = validLimit;
 
-      params = {
-        offset: validOffset,
-        limit: validLimit,
-        month: `${year}-${month}`,
-      };
+      if (date instanceof Date && isValidDate(date)) {
+        validDate = format(date, 'YYYY-MM');
+      } else if (date && dateStringRegex.test(String(date))) {
+        validDate = date;
+      }
+
+      if (validDate) {
+        params.month = validDate;
+      }
     }
 
     // TODO: Evaluate if budgets should be obtained by month, start date or creation date

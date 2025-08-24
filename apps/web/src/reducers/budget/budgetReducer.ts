@@ -23,14 +23,12 @@ function budgetReducer(state: BudgetState, action: BudgetAction) {
         recentBudgets: action.payload,
       });
     case BudgetActionType.SYNC_PAGINATED:
-      console.log(action.payload);
       return ({
         ...state,
         paginatedBudgets: action.payload,
         loading: false,
       });
     case BudgetActionType.SET_BUDGETS:
-      console.log(action.payload);
       return ({
         ...state,
         budgets: action.payload,

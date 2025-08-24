@@ -32,7 +32,7 @@ export default function ChartCard({
 }: Props) {
   const containerClasses = cn({
     invisible: hidden,
-  }, 'flex flex-col border-none pb-4 rounded-md shadow-none', containerClassName);
+  }, 'flex flex-col border-none pb-4 pt-0 rounded-md shadow-none', containerClassName);
 
   const titleClasses = cn({
     'flex gap-2 items-center': titleIcon,

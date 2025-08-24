@@ -11,14 +11,16 @@ import { Separator } from '@budmin/ui';
 import {
   Typography,
 } from '@budmin/ui/internal/Typography';
+import useAuth from '@/hooks/useAuth';
 
 export default function RecentBudgets() {
-  const { updateRecentBudgets, state: { recentBudgets } } = useBudgets();
-  const { state: { recentTransactions } } = useTransactions();
   const [
     budgetsWithPlaceholder,
     setBudgetsWithPlaceholders,
   ] = useState<Budget[]>([]);
+  const { updateRecentBudgets, state: { recentBudgets } } = useBudgets();
+  const { state: { user: { createdAt } } } = useAuth();
+  const { state: { recentTransactions } } = useTransactions();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -44,8 +46,8 @@ export default function RecentBudgets() {
   }, [recentBudgets]);
 
   useEffect(() => {
-    updateRecentBudgets();
-  }, [recentTransactions, updateRecentBudgets]);
+    updateRecentBudgets(new Date(createdAt));
+  }, [recentTransactions, createdAt, updateRecentBudgets]);
 
   return (
     <section className="relative rounded-md mb-4 md:col-span-10 md:mb-0 md:flex md:flex-col bg-white">

@@ -12,8 +12,8 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-  Button,
-} from '@budmin/ui';
+} from '@budmin/ui/shadcn/dropdown-menu';
+import { Button } from '@budmin/ui/shadcn/button';
 
 interface Props {
   item: Transaction
@@ -68,7 +68,7 @@ export default function ActionsMenu({
           <DropdownMenuLabel>
             {t('history.datatable.actions.label')}
           </DropdownMenuLabel>
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem asChild onSelect={(e) => e.preventDefault()}>
             <CreationDialog
               type={type}
               triggerLabel={t('helpers.edit')}
