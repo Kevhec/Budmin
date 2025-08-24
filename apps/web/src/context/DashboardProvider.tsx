@@ -49,14 +49,14 @@ function DashboardProvider({ children }: PropsWithChildren) {
   }, [month, year]);
 
   useEffect(() => {
-    const savedMonth = Number.parseInt(getItem('dashboard-month'), 10);
-    const savedYear = Number.parseInt(getItem('dashboard-year'), 10);
+    const savedMonth = Number.parseInt(getItem('dashboard-month') || '', 10);
+    const savedYear = Number.parseInt(getItem('dashboard-year') || '', 10);
 
-    if (savedMonth) {
+    if (!Number.isNaN(savedMonth)) {
       setMonth(savedMonth);
     }
 
-    if (savedYear) {
+    if (!Number.isNaN(savedYear)) {
       setYear(savedYear);
     }
   }, []);

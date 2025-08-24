@@ -8,7 +8,7 @@ import {
 } from '@shadcn/select.tsx';
 import { type Period, display12HourValue, setDateByType } from './time-picker-utils.tsx';
 
-export interface PeriodSelectorProps {
+export interface PeriodSelectorProps extends React.ComponentProps<'button'> {
   period: Period;
   setPeriod: (m: Period) => void;
   date: Date | undefined;

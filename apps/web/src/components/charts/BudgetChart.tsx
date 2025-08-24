@@ -4,7 +4,6 @@ import {
 import { format } from '@formkit/tempo';
 import { suffixNumberFormatter } from '@/lib/formatNumber';
 import type { BudgetAmountDataNullable, BudgetBalanceChartData } from '@/types';
-import { type NameType, type Payload, type ValueType } from 'recharts/types/component/DefaultTooltipContent';
 import { useTranslation } from 'react-i18next';
 import {
   type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent,
@@ -13,6 +12,7 @@ import { Typography } from '@budmin/ui/internal/Typography';
 import { Separator } from '@budmin/ui/shadcn/separator';
 import { cn } from '@/lib/utils';
 
+type ValueType = string | number | (string | number)[];
 interface Props {
   budgetAmountData: BudgetAmountDataNullable
   chartConfig: ChartConfig
@@ -22,7 +22,12 @@ interface Props {
 
 interface BudgetChartTooltipProps {
   value: ValueType
-  item: Payload<ValueType, NameType>
+  item: {
+    payload?: {
+      description?: string
+      amount?: string | number
+    }
+  }
 }
 
 function BudgetChartTooltip({
@@ -34,7 +39,7 @@ function BudgetChartTooltip({
   return (
     <div className="flex gap-2 flex-col">
       {
-        (item.payload.description && item.payload.amount) && (
+        (item.payload?.description && item.payload?.amount) && (
           <div className="flex gap-2">
             <div
               className="h-2.5 w-2.5 shrink-0 rounded-[2px] bg-darkGray self-center"

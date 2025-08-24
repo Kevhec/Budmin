@@ -2,7 +2,7 @@ import { Navigate, Outlet, useLocation } from 'react-router';
 import { CirclePlus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
-import React, { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import Navigation from '@/components/sections/Navigation';
 import Header from '@/components/sections/Header';
 import {
@@ -23,40 +23,14 @@ export default function AppLayout() {
   const location = useLocation();
   const { t } = useTranslation();
   const headerRef = useRef<HTMLElement | null>(null);
-  const [containerHeight, setContainerHeight] = useState(0);
   const isBudgetsPage = location.pathname === '/app/budgets';
 
   const isTabletOrDesktop = useMediaQuery({
     query: '(min-width: 768px)',
   });
 
-  let ContainerComponent: React.ElementType = 'div';
-
-  const getContainerHeight = () => {
-    if (headerRef.current) {
-      const headerHeight = headerRef.current.offsetHeight;
-      const windowHeight = window.innerHeight;
-
-      const newContainerHeight = windowHeight - headerHeight;
-
-      setContainerHeight(newContainerHeight);
-    }
-  };
-
-  useEffect(() => {
-    getContainerHeight();
-
-    window.addEventListener('resize', getContainerHeight);
-
-    return () => window.removeEventListener('resize', getContainerHeight);
-  }, []);
-
   if (location.pathname === '/app/') {
     return <Navigate to="/app/dashboard" replace />;
-  }
-
-  if (!isBudgetsPage || !isTabletOrDesktop) {
-    ContainerComponent = ScrollArea;
   }
 
   const containerClasses = cn(

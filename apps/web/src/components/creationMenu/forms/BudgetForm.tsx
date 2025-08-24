@@ -12,7 +12,7 @@ import {
 } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
-import { concurrenceInit } from '@/lib/constants';
+import { concurrenceInit, localesMap } from '@/lib/constants';
 import ConcurrenceEndDate from '@/components/ConcurrenceEndDate';
 import { type CreateBudgetParams, type Budget } from '@/types';
 import { useTranslation } from 'react-i18next';
@@ -70,6 +70,7 @@ export default function BudgetForm({
   const { t, i18n } = useTranslation();
 
   const currentLanguage = i18n.language;
+  const locale = localesMap[currentLanguage as keyof typeof localesMap];
   const languageCode = currentLanguage.split('-')[0];
   const getValue = getModeValue(editMode);
 
@@ -225,8 +226,8 @@ export default function BudgetForm({
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    localeString={currentLanguage}
-                    initialFocus
+                    locale={locale}
+                    autoFocus
                   />
                 </PopoverContent>
               </Popover>
@@ -344,8 +345,8 @@ export default function BudgetForm({
                           mode="single"
                           selected={field.value}
                           onSelect={field.onChange}
-                          localeString={currentLanguage}
-                          initialFocus
+                          locale={locale}
+                          autoFocus
                           disabled={{ before: currentStartDate || null }}
                         />
                       </PopoverContent>

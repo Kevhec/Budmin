@@ -6,6 +6,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
     "createMigration": "node ./src/lib/scripts/generateMigration.js",
     "seedAll": "dotenvx run -f .env.development -- pnpm dlx sequelize-cli db:seed:all",
     "dev": "dotenvx run -f .env.development -- tsx watch ./src/index.ts"
@@ -14,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@budmin/eslint-config": "workspace:*",
     "@tsconfig/node16": "^16.1.3",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.7",
@@ -22,6 +24,9 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.14.3",
     "@types/node-cron": "^3.0.11",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.32.0",
     "sequelize-cli": "^6.6.2",
     "tsx": "^4.19.2"
   },
