@@ -135,6 +135,7 @@ async function getAllTransactions(
   res: Response,
 ): Promise<Response | undefined> {
   const transactionId = req.params.id;
+  // TODO: Month param should be named differently, maybe date or split it in two "year" and "month"
   const {
     offset, limit, month, include,
   } = req.query;

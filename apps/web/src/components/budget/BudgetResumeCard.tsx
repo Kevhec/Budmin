@@ -40,7 +40,7 @@ export default function BudgetResumeCard({
     invisible: hidden,
     'overflow-hidden': variant === 'expanded',
     'hover:bg-accent cursor-pointer active:scale-[98%]': !!onClick,
-  }, 'border-none transition-colors transition-transform shadow-none px-4 py-2 relative md:pl-6 md:gap-6 md:grow md:items-center relative', className);
+  }, 'border-none transition-colors transition-transform shadow-none px-4 py-2 md:pt-4 relative md:pl-6 md:gap-6 md:grow md:items-center md:flex-row', className);
 
   const handleClick: MouseEventHandler<HTMLDivElement> = (e) => {
     if (onClick) {
@@ -51,10 +51,10 @@ export default function BudgetResumeCard({
   return (
     <Card tabIndex={hidden ? 0 : 1} className={containerClasses} onClick={handleClick}>
       <RemainingIndicator totalAmount={totalAmount} netAmount={netAmount} variant={variant} />
-      <CardContent className={cn('p-0', { 'space-y-4': variant === 'expanded' })}>
-        <div className="relative p-0 grid grid-cols-2 gap-4">
+      <CardContent className={cn('p-0 md:justify-center w-full', { 'space-y-4': variant === 'expanded' })}>
+        <div className="relative p-0 grid grid-cols-2 gap-4 h-full">
           <div className="font-inter p-0">
-            <CardTitle className="capitalize font-medium text-lg truncate" title={name}>{name}</CardTitle>
+            <CardTitle className="capitalize font-medium text-lg md:text-2xl truncate md:mb-2" title={name}>{name}</CardTitle>
             <DateRange
               startDate={startDate}
               endDate={endDate}
@@ -65,7 +65,7 @@ export default function BudgetResumeCard({
         </div>
         {
           variant === 'expanded' && (
-            <div className="flex justify-between py-2 md:py-4">
+            <div className="flex justify-between gap-1 py-2 md:p-0">
               <Typography className="text-sm">
                 {`${budget.transactionsCount} ${t('budgetResumeCard.transactionsAmount')}`}
               </Typography>

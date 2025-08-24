@@ -66,7 +66,7 @@ export interface BudgetContextType {
   createBudget: (data: CreateBudgetParams) => void
   getBudgets: () => void
   getPaginatedBudgets: (options: PaginatedParams) => void
-  updateRecentBudgets: () => void
+  updateRecentBudgets: (date?: Date | string) => void
 }
 
 export type BudgetBalanceChartData = {

@@ -99,6 +99,9 @@
         "title": "Así va tu dinero",
         "description": "Selecciona qué datos deseas conocer anualmente: saldo total, gastos o ingresos."
       }
+    },
+    "monthSelect": {
+      "label": "Viendo"
     }
   },
   "helpers": {

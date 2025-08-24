@@ -8,8 +8,10 @@ import { type NameType, type Payload, type ValueType } from 'recharts/types/comp
 import { useTranslation } from 'react-i18next';
 import {
   type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent,
-} from '@budmin/ui';
-import { Separator, Typography } from '@budmin/ui';
+} from '@budmin/ui/shadcn/chart';
+import { Typography } from '@budmin/ui/internal/Typography';
+import { Separator } from '@budmin/ui/shadcn/separator';
+import { cn } from '@/lib/utils';
 
 interface Props {
   budgetAmountData: BudgetAmountDataNullable
@@ -82,8 +84,9 @@ export default function BudgetChart({
   chartData,
   className,
 }: Props) {
+  const containerClasses = cn('min-h-[100px]', className);
   return (
-    <ChartContainer config={chartConfig} className={className}>
+    <ChartContainer config={chartConfig} className={containerClasses}>
       <LineChart
         accessibilityLayer
         data={chartData}
@@ -104,25 +107,27 @@ export default function BudgetChart({
           width={35}
           tickFormatter={(value) => `$${suffixNumberFormatter.format(value)}`}
         />
-        {
-          budgetAmountData?.amountBounds && (
-            <>
-              <ReferenceArea
-                y1={budgetAmountData.amountBounds.safe.y1}
-                fill="hsl(145 39% 57%)"
-              />
-              <ReferenceArea
-                y1={budgetAmountData.amountBounds.warn.y1}
-                y2={budgetAmountData.amountBounds.warn.y2}
-                fill="hsl(34 85% 63%)"
-              />
-              <ReferenceArea
-                y2={budgetAmountData.amountBounds.danger.y2}
-                fill="hsl(6 69% 58%)"
-              />
-            </>
-          )
-        }
+        {budgetAmountData?.amountBounds?.safe?.y1 != null && (
+          <ReferenceArea
+            y1={budgetAmountData.amountBounds.safe.y1}
+            fill="hsl(145 39% 57%)"
+          />
+        )}
+        {budgetAmountData?.amountBounds?.warn?.y1 != null
+        && budgetAmountData.amountBounds.warn.y2 != null && (
+          <ReferenceArea
+            y1={budgetAmountData.amountBounds.warn.y1}
+            y2={budgetAmountData.amountBounds.warn.y2}
+            fill="hsl(34 85% 63%)"
+          />
+        )}
+        {budgetAmountData?.amountBounds?.danger?.y2 != null && (
+          <ReferenceArea
+            y2={budgetAmountData.amountBounds.danger.y2}
+            fill="hsl(6 69% 58%)"
+          />
+        )}
+
         <ChartTooltip
           cursor={false}
           content={(

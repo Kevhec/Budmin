@@ -32,7 +32,7 @@ export interface Transaction {
 export interface PaginatedParams {
   page?: number
   limit?: number
-  date?: Date
+  date?: Date | string
   presetUrl?: string
   include?: string
 }
@@ -89,6 +89,7 @@ export interface TransactionsContextType {
   state: TransactionState
   createTransaction: (data: CreateTransactionParams) => void
   getBalance: (from?: string, to?: string) => void
+  getRecentTransactions: ({ year, month }: { year: number | null, month: number | null }) => void
   changePage: (params: PaginatedParams) => void
   updateTransaction: (id: string, data: CreateTransactionParams) => void
   deleteTransaction: (id: string) => void

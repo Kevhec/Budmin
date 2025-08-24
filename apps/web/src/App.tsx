@@ -15,6 +15,7 @@ import VerifyAccount from './routes/public/VerifyAccount';
 import SignUp from './routes/public/SignUp';
 import SuccessSignUp from './routes/public/SuccessSignUp';
 import NoAuthOnly from './routes/public/NoAuthOnly';
+import { DashboardProvider } from './context/DashboardProvider';
 
 function App() {
   return (
@@ -68,7 +69,9 @@ function App() {
                 path="dashboard"
                 element={(
                   <ProtectedRoute>
-                    <Dashboard />
+                    <DashboardProvider>
+                      <Dashboard />
+                    </DashboardProvider>
                   </ProtectedRoute>
               )}
               />

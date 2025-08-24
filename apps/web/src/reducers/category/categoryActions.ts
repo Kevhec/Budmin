@@ -30,13 +30,19 @@ async function syncCategories(dispatch: Dispatch<CategoryAction>) {
   }
 }
 
-async function getBalance(dispatch: Dispatch<CategoryAction>) {
+async function getBalance(dispatch: Dispatch<CategoryAction>, date?: string) {
   dispatch({
     type: CategoryActionType.SET_LOADING,
     payload: true,
   });
   try {
-    const { data } = await axiosClient.get<ApiResponse<CategoriesMonthlyBalance>>('/category/balance/');
+    const params = {
+      date,
+    };
+
+    const { data } = await axiosClient.get<ApiResponse<CategoriesMonthlyBalance>>('/category/balance/', {
+      params,
+    });
 
     const newBalance = data.data;
 

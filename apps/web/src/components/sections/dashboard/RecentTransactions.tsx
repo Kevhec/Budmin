@@ -4,17 +4,19 @@ import TransactionResumeCard from '@/components/TransactionResumeCard';
 import useTransactions from '@/hooks/useTransactions';
 import { NavLink } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { Separator } from '@budmin/ui';
+import { Separator } from '@budmin/ui/shadcn/separator';
 import {
   Typography,
 } from '@budmin/ui/internal/Typography';
+import { useDashboard } from '@/context/DashboardProvider';
 
 export default function RecentTransactions() {
-  const { state: { recentTransactions } } = useTransactions();
+  const { state: { recentTransactions }, getRecentTransactions } = useTransactions();
   const [
     transactionsWithPlaceholder,
     setTransactionsWithPlaceholders,
   ] = useState<Transaction[]>([]);
+  const { year, month } = useDashboard();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -35,8 +37,12 @@ export default function RecentTransactions() {
     setTransactionsWithPlaceholders(newTransactionsWithPlaceholders);
   }, [recentTransactions]);
 
+  useEffect(() => {
+    getRecentTransactions({ year, month });
+  }, [year, month, getRecentTransactions]);
+
   return (
-    <section className="rounded-md mb-2 md:mb-0 bg-white p-4 md:flex-1 md:col-span-10 md:row-start-2">
+    <section className="rounded-md mb-2 md:mb-0 bg-white p-4 md:flex-1 md:col-span-10 md:row-start-3">
       <div className="flex justify-between items-center pb-4">
         <Typography variant="h2">
           {t('dashboard.recentTransactions.heading')}

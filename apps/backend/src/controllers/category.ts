@@ -96,16 +96,26 @@ async function getCategoriesMonthlyBalance(
   res: Response,
 ): Promise<Response | undefined> {
   const userId = req.user?.id;
-
-  const [start, end] = generateDateRange({});
+  // TODO: Modify date to work with month and year separately
+  const {
+    date
+  } = req.query
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const whereClause: any = {
     userId,
-    date: {
-      [Op.between]: [start, end],
-    },
   };
+
+  const dateRange = generateDateRange({ fromDate: date ? String(date) : undefined });
+
+  if (dateRange) {
+    const [start, end] = dateRange;
+
+    whereClause.date = {
+      [Op.between]: [start, end],
+    };
+  }
+
 
   try {
     const balance = await Transaction.findAll({
@@ -135,7 +145,7 @@ async function getCategoriesMonthlyBalance(
 
     return res.status(200).json({
       data: {
-        month: start?.getMonth(),
+        month: dateRange[0]?.getMonth(),
         balance,
       },
     });

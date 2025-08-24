@@ -10,8 +10,8 @@ import {
   Typography,
 } from '@budmin/ui/internal/Typography';
 import {
-  Badge,
-} from '@budmin/ui/shadcn/badge';
+  ColoredBadge,
+} from '@budmin/ui/internal/ColoredBadge';
 
 type Props = {
   transaction: Transaction
@@ -21,7 +21,7 @@ type Props = {
 export default function TransactionResumeCard({
   transaction, hidden,
 }: Props) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
 
   const {
@@ -44,10 +44,9 @@ export default function TransactionResumeCard({
           <Typography className="capitalize font-medium truncate max-w-32" title={description}>
             {description || 'Placeholder'}
           </Typography>
-          <Badge
-            style={{
-              backgroundColor: category?.color,
-            }}
+          <ColoredBadge
+            color={category?.color}
+            label={t(category?.key || 'category.unnamed')}
           />
         </div>
         <div className="flex justify-between">
@@ -56,7 +55,11 @@ export default function TransactionResumeCard({
           </Typography>
           <Typography className={amountClasses}>
             {/* TODO: Add user preference: Currency. As third param */}
-            {formatMoney(amount || 0, currentLanguage)}
+            {
+              formatMoney(amount || 0, {
+                locale: currentLanguage,
+              })
+            }
           </Typography>
         </div>
       </CardContent>

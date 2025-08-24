@@ -7,19 +7,27 @@ import {
   syncCategories as syncCategoriesAction,
   getBalance as getBalanceAction,
 } from '@/reducers/category/categoryActions';
+import { getItem } from '@/lib/localStorage';
+import { formatYearMonthDate } from '@/lib/utils';
 
 export const CategoriesContext = createContext<CategoriesContextType | null>(null);
 
 function CategoriesProvider({ children }: PropsWithChildren) {
   const [state, dispatch] = useReducer(categoryReducer, initialCategoriesState);
 
-  useEffect(() => {
-    syncCategoriesAction(dispatch);
-    getBalanceAction(dispatch);
+  const updateBalance = useCallback(({ year, month }: { year?: number, month?: number }) => {
+    const date = formatYearMonthDate({ year, month });
+
+    getBalanceAction(dispatch, date);
   }, []);
 
-  const updateBalance = useCallback(() => {
-    getBalanceAction(dispatch);
+  useEffect(() => {
+    const year = getItem<number>('dashboard-year');
+    const month = getItem<number>('dashboard-month');
+    const date = formatYearMonthDate({ year, month });
+
+    syncCategoriesAction(dispatch);
+    getBalanceAction(dispatch, date);
   }, []);
 
   const contextValue = useMemo(() => ({

@@ -12,6 +12,8 @@ import {
   deleteTransaction as deleteTransactionAction,
 } from '@/reducers/transaction/transactionActions';
 import { defaultPaginatedOptions } from '@/lib/constants';
+import { getItem } from '@/lib/localStorage';
+import { formatYearMonthDate } from '@/lib/utils';
 import type { PaginatedParams } from '../types/transaction';
 
 export const TransactionsContext = createContext<TransactionsContextType | null>(null);
@@ -34,6 +36,14 @@ function TransactionsProvider({ children }: PropsWithChildren) {
     syncPaginatedTransactionsAction(dispatch, params);
   }, []);
 
+  const getRecentTransactions = useCallback(
+    ({ year, month }: { year: number | null, month: number | null }) => {
+      const queryDate = formatYearMonthDate({ year, month });
+      syncRecentTransactionsAction(dispatch, queryDate);
+    },
+    [],
+  );
+
   const updateTransaction = useCallback((id: string, data: CreateTransactionParams) => {
     updateTransactionAction(dispatch, data, id);
   }, []);
@@ -47,14 +57,26 @@ function TransactionsProvider({ children }: PropsWithChildren) {
     createTransaction,
     getBalance,
     changePage,
+    getRecentTransactions,
     updateTransaction,
     deleteTransaction,
-  }), [state, createTransaction, getBalance, changePage, updateTransaction, deleteTransaction]);
+  }), [
+    state,
+    createTransaction,
+    getBalance,
+    changePage,
+    updateTransaction,
+    deleteTransaction,
+    getRecentTransactions,
+  ]);
 
   useEffect(() => {
-    syncRecentTransactionsAction(dispatch);
+    const month = getItem<number>('dashboard-month');
+    const year = getItem<number>('dashboard-year');
+
+    getRecentTransactions({ year, month });
     syncPaginatedTransactionsAction(dispatch, defaultPaginatedOptions);
-  }, []);
+  }, [getRecentTransactions]);
 
   return (
     <TransactionsContext.Provider value={contextValue}>

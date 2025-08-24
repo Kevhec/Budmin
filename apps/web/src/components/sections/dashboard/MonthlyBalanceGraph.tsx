@@ -8,12 +8,11 @@ import {
 } from 'recharts';
 import ChartCard from '@/components/charts/ChartCard';
 import { useEffect, useMemo, useState } from 'react';
-import useAuth from '@/hooks/useAuth';
 import { format } from '@formkit/tempo';
 import useTransactions from '@/hooks/useTransactions';
 import { SPANISH_MONTHS } from '@/lib/constants';
 import { formatMoney, suffixNumberFormatter } from '@/lib/formatNumber';
-import { cn, generateYearsList } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { z } from 'zod';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -31,21 +30,12 @@ import {
   Checkbox,
 } from '@budmin/ui/shadcn/checkbox';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@budmin/ui/shadcn/select';
-import {
   type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from '@budmin/ui/shadcn/chart';
-import {
-  Typography,
-} from '@budmin/ui/internal/Typography';
+import { useDashboard } from '@/context/DashboardProvider';
 
 export const description = 'A linear line chart';
 
@@ -54,15 +44,9 @@ const FilterSchema = z.object({
 });
 
 export default function MonthlyBalanceGraph() {
-  const {
-    state: {
-      user,
-    },
-  } = useAuth();
   const { getBalance, state: { balance, recentTransactions } } = useTransactions();
-  const [filterYearsList, setFilterYearsList] = useState<number[]>([]);
   const [chartData, setChartData] = useState<any[]>([]);
-  const [selectedYear, setSelectedYear] = useState<string>(new Date().getFullYear().toString());
+  const { year } = useDashboard();
   const { t, i18n } = useTranslation();
   const filterForm = useForm<z.infer<typeof FilterSchema>>({
     resolver: zodResolver(FilterSchema),
@@ -130,7 +114,7 @@ export default function MonthlyBalanceGraph() {
 
   useEffect(() => {
     const getData = async () => {
-      const januaryDate = new Date(parseInt(selectedYear, 10), 0, 1);
+      const januaryDate = new Date(year, 0, 1);
 
       getBalance(
         format(januaryDate, 'YYYY-MM', currentLanguage),
@@ -138,18 +122,10 @@ export default function MonthlyBalanceGraph() {
     };
 
     getData();
-  }, [getBalance, recentTransactions, selectedYear, currentLanguage]);
+  }, [recentTransactions, currentLanguage, year, getBalance]);
 
   useEffect(() => {
-    const userCreationDate = new Date(user.createdAt);
-
-    const yearsSinceCreation = generateYearsList(userCreationDate.getFullYear());
-
-    setFilterYearsList(yearsSinceCreation);
-  }, [user.createdAt]);
-
-  useEffect(() => {
-    const selectedYearBalanceHistory = balance[selectedYear];
+    const selectedYearBalanceHistory = balance[year];
 
     if (!selectedYearBalanceHistory) {
       setChartData([]);
@@ -180,35 +156,18 @@ export default function MonthlyBalanceGraph() {
     });
 
     setChartData(newChartData);
-  }, [balance, selectedYear]);
+  }, [balance, year]);
 
   return (
-    <section className="md:col-span-10 xl:col-span-10">
+    <section className="md:col-span-10">
       <ChartCard
         title={t('dashboard.monthlyBalanceGraph.graph.title')}
         titleIcon={<TrendingUp />}
         titleLeft
-        subtitle={(
-          <div className="flex gap-2 items-center">
-            <Typography className="text-foreground">
-              {t('common.year')}
-            </Typography>
-            <Select defaultValue={selectedYear} onValueChange={setSelectedYear}>
-              <SelectTrigger className="w-fit px-2 py-1 h-fit">
-                <SelectValue placeholder={selectedYear} />
-              </SelectTrigger>
-              <SelectContent className="max-h-56">
-                {filterYearsList.map((year) => (
-                  <SelectItem key={`filter-years-${year}`} value={year.toString()}>{year}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        )}
         titleClassName="font-inter text-lg font-medium"
-        headerClassName="px-4 py-4 border-b border-b-slate-200"
+        headerClassName="px-4 !pb-4 pt-0 border-b border-b-slate-200"
         contentClassName="px-4 pt-4"
-        containerClassName="h-full"
+        containerClassName="h-full py-4"
         headerRightElement={(
           <Form {...filterForm}>
             <form onSubmit={(evt) => evt.preventDefault()}>
@@ -221,7 +180,7 @@ export default function MonthlyBalanceGraph() {
                     <FormDescription className="sr-only">
                       {t('dashboard.monthlyBalanceGraph.graph.description')}
                     </FormDescription>
-                    <div className="flex flex-col gap-2 xl:flex-row xl:gap-4">
+                    <div className="flex flex-row gap-4 justify-between w-full xl:flex-row xl:gap-4">
                       {
                         filterTypes.map((item) => (
                           <FormField
@@ -295,7 +254,9 @@ export default function MonthlyBalanceGraph() {
                 />
                 <ChartTooltip
                   cursor={false}
-                  content={<ChartTooltipContent customValueFormatter={formatMoney} hideLabel />}
+                  content={
+                    <ChartTooltipContent customValueFormatter={formatMoney as any} hideLabel />
+                  }
                 />
                 {
                   chartLines.map((line) => (

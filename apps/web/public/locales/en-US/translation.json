@@ -99,6 +99,9 @@
         "title": "How Your Money Is Spent",
         "description": "Select which data you want to view annually: total balance, expenses, or income."
       }
+    },
+    "monthSelect": {
+      "label": "Viewing"
     }
   },
   "helpers": {

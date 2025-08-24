@@ -31,8 +31,8 @@ function BudgetProvider({ children }: React.PropsWithChildren) {
     syncPaginatedBudgetsAction(dispatch, options, true);
   }, []);
 
-  const updateRecentBudgets = useCallback(() => {
-    syncRecentBudgetsAction(dispatch);
+  const updateRecentBudgets = useCallback((date?: Date | string) => {
+    syncRecentBudgetsAction(dispatch, date);
   }, []);
 
   const contextValue = useMemo<BudgetContextType>(() => ({
