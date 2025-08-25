@@ -7,12 +7,12 @@ COPY . .
 RUN npm install -g pnpm turbo
 
 # Prune to only backend and deps
-RUN turbo prune --scope=backend --docker
+RUN turbo prune --scope=@budmin/backend --docker
 
 # Install and build backend
 WORKDIR /app/out
 RUN pnpm install --frozen-lockfile
-RUN pnpm turbo run build --filter=backend...
+RUN pnpm turbo run build --filter=@budmin/backend...
 
 # Stage 2: Runtime
 FROM node:20 AS runner
