@@ -29,7 +29,7 @@ class SequelizeConnection {
       connectionOptions.ssl = true;
       connectionOptions.dialectOptions = {
         ssl: {
-          ca: fs.readFileSync('../ca.pem').toString(),
+          ca: process.env.DB_CA_CERT || fs.readFileSync('../ca.pem').toString(),
           rejectUnauthorized: true,
         },
       };
