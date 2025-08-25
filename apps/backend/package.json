@@ -10,7 +10,7 @@
     "createMigration": "node ./src/lib/scripts/generateMigration.js",
     "seedAll": "dotenvx run -f .env.development -- pnpm dlx sequelize-cli db:seed:all",
     "dev": "dotenvx run -f .env.development -- tsx watch ./src/index.ts",
-    "start": "node dist/index.js"
+    "start": "dotenvx run -f .env.development -- node dist/index.js"
   },
   "packageManager": "pnpm@10.15.0+sha512.486ebc259d3e999a4e8691ce03b5cac4a71cbeca39372a9b762cb500cfdf0873e2cb16abe3d951b1ee2cf012503f027b98b6584e4df22524e0c7450d9ec7aa7b",
   "keywords": [],
@@ -27,6 +27,7 @@
     "@types/node": "^20.14.3",
     "@types/node-cron": "^3.0.11",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "esbuild-fix-imports-plugin": "^1.0.21",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.32.0",
     "sequelize-cli": "^6.6.2",

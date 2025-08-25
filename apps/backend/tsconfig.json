@@ -1,22 +1,16 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
-    // Treat files as modules even if it doesn't use import/export
     "moduleDetection": "force",
-    // Ignore module structure
     "module": "ESNext",
-    // Allow JSON modules to be imported
     "resolveJsonModule": true,
-    // Allow JS files to be imported from TS and vice versa
     "allowJs": true,
-    // Use correct ESM import behavior
     "esModuleInterop": true,
-    // Disallow features that require cross-file awareness
+    "allowSyntheticDefaultImports": true, // Add this
     "isolatedModules": true,
     "skipLibCheck": true,
     "target": "ESNext",
-    // REMOVE THIS LINE: "noEmit": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler", // Change from "node" to "bundler"
     "lib": ["esnext"],
     "types": ["node"],
     "baseUrl": ".",
@@ -33,7 +27,6 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "composite": true,
-    // Add these for better build output
     "declaration": true,
     "sourceMap": true
   },

@@ -1,5 +1,5 @@
-import { User } from '@/src/database/models';
 import { Op } from 'sequelize';
+import { User } from '@database/models/index.js';
 import deepUserRemove from './deepUserRemove';
 
 async function deleteUnverifiedUsers() {
