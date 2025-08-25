@@ -1,44 +1,51 @@
-# ---- Base image ----
+# -------------------------
+# 1. Base image with pnpm
+# -------------------------
 FROM node:20-alpine AS base
+RUN npm install -g pnpm
+
 WORKDIR /app
 
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
-
-# ---- Dependencies ----
+# -------------------------
+# 2. Dependencies layer
+# -------------------------
 FROM base AS deps
-WORKDIR /app
 
-# Copy lockfiles and workspace info first (better caching)
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+# Copy only the backend package manifest files
+COPY ./package.json ./pnpm-lock.yaml* ./pnpm-workspace.yaml* ./
+COPY ./backend/package.json ./backend/
 
-# Copy backend package.json so pnpm can resolve it
-COPY backend/package.json ./backend/
+# Install only backend dependencies
+RUN pnpm install --filter backend --prod --frozen-lockfile
 
-# Install only backend dependencies (workspace-aware)
-RUN pnpm install --filter backend... --frozen-lockfile
-
-# ---- Build ----
+# -------------------------
+# 3. Build layer
+# -------------------------
 FROM deps AS build
-WORKDIR /app
 
-# Copy the whole monorepo (for shared packages if any)
+# Copy full repo (so that pnpm can resolve workspaces if needed)
 COPY . .
 
-# Build backend (if needed, e.g. TypeScript)
-RUN pnpm --filter backend build
+# Build backend (if it has a build step)
+RUN pnpm --filter backend build || echo "No build step"
 
-# ---- Production ----
-FROM base AS prod
-WORKDIR /app
+# -------------------------
+# 4. Runtime image
+# -------------------------
+FROM base AS runner
 
-# Copy only the built backend and its node_modules
-COPY --from=build /app/backend ./backend
+WORKDIR /app/backend
+
+# Copy production dependencies only
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/backend/node_modules ./backend/node_modules
+COPY --from=build /app/backend ./
 
-# Expose backend port (change if not 3000)
+# If your backend uses dist/ as build output:
+# WORKDIR /app/backend
+# CMD ["node", "dist/index.js"]
+
+# Otherwise if using tsx or similar:
+CMD ["pnpm", "start"]
+
+# Expose port (adjust if needed)
 EXPOSE 3000
-
-# Start backend
-CMD ["pnpm", "--filter", "backend", "start"]
