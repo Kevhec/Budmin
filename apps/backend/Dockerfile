@@ -9,8 +9,8 @@ RUN apk update
 RUN apk add --no-cache libc6-compat
 # Set working directory
 WORKDIR /app
-# Install turbo globally
-RUN pnpm add -g turbo
+# Install turbo globally using npm (simpler than setting up pnpm global)
+RUN npm install -g turbo
 COPY . .
 RUN turbo prune @budmin/backend --docker
 
