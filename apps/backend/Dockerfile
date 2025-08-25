@@ -1,51 +1,41 @@
-# -------------------------
-# 1. Base image with pnpm
-# -------------------------
-FROM node:20-alpine AS base
-RUN npm install -g pnpm
+# Stage 1: Build
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# -------------------------
-# 2. Dependencies layer
-# -------------------------
-FROM base AS deps
+# Enable pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Copy only the backend package manifest files
-COPY ./package.json ./pnpm-lock.yaml* ./pnpm-workspace.yaml* ./
-COPY ./backend/package.json ./backend/
+# Copy root-level manifests (pnpm lock + workspace info)
+COPY ../../package.json ../../pnpm-lock.yaml* ../../pnpm-workspace.yaml* ./
 
-# Install only backend dependencies
-RUN pnpm install --filter backend --prod --frozen-lockfile
+# Copy backend package.json
+COPY ./package.json ./apps/backend/package.json
 
-# -------------------------
-# 3. Build layer
-# -------------------------
-FROM deps AS build
+# Install only backend deps
+RUN pnpm install --filter @budmin/backend...
 
-# Copy full repo (so that pnpm can resolve workspaces if needed)
-COPY . .
+# Copy backend source
+COPY . ./apps/backend
 
-# Build backend (if it has a build step)
-RUN pnpm --filter backend build || echo "No build step"
+# Build backend
+RUN pnpm --filter @budmin/backend build
 
-# -------------------------
-# 4. Runtime image
-# -------------------------
-FROM base AS runner
 
-WORKDIR /app/backend
+# Stage 2: Runtime
+FROM node:20-alpine AS runner
 
-# Copy production dependencies only
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=build /app/backend ./
+WORKDIR /app
 
-# If your backend uses dist/ as build output:
-# WORKDIR /app/backend
-# CMD ["node", "dist/index.js"]
+# Enable pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Otherwise if using tsx or similar:
-CMD ["pnpm", "start"]
+# Copy production deps
+COPY --from=builder /app/node_modules ./node_modules
 
-# Expose port (adjust if needed)
-EXPOSE 3000
+# Copy backend build
+COPY --from=builder /app/apps/backend/dist ./dist
+COPY --from=builder /app/apps/backend/package.json ./package.json
+
+# Run backend
+CMD ["node", "dist/index.js"]
