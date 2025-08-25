@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import { User } from '@database/models/index.js';
-import deepUserRemove from './deepUserRemove';
+import deepUserRemoval from './deepUserRemoval';
 
 async function deleteUnverifiedUsers() {
   const sevenDaysAgo = new Date();
@@ -16,9 +16,7 @@ async function deleteUnverifiedUsers() {
       },
     });
 
-    unverifiedAndExpiredUsers.forEach((user) => {
-      deepUserRemove(user);
-    });
+    await Promise.all(unverifiedAndExpiredUsers.map((user) => deepUserRemoval(user)));
   } catch (error) {
     throw new Error('Error while deleting unverified users');
   }

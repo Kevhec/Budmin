@@ -8,7 +8,7 @@ import CronTask from '@/src/database/models/cronTask';
 
 const sequelize = SequelizeConnection.getInstance();
 
-async function deepUserRemove(user: User) {
+async function deepUserRemoval(user: User) {
   try {
     const t = await sequelize.transaction();
 
@@ -64,4 +64,4 @@ async function deepUserRemove(user: User) {
   }
 }
 
-export default deepUserRemove;
+export default deepUserRemoval;

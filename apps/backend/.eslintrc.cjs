@@ -10,6 +10,7 @@ module.exports = {
     '@typescript-eslint/no-floating-promises': 'error',
     'import/extensions': 'off',
     "@typescript-eslint/no-explicit-any": "warn",
+    'no-console': 'off',
   },
   settings: {
     'import/resolver': {
