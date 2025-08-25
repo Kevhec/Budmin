@@ -1,33 +1,44 @@
-# Stage 1: Prune unnecessary packages
-FROM node:20 AS pruner
+# ---- Base image ----
+FROM node:20-alpine AS base
 WORKDIR /app
 
-# Copy only files needed for pruning
-COPY turbo.json pnpm-workspace.yaml pnpm-lock.yaml ./
-COPY apps/backend/package.json apps/backend/package.json
-COPY packages/*/package.json packages/*/package.json
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-RUN npm install -g turbo pnpm
-RUN turbo prune --scope=@budmin/backend --docker
-
-# Stage 2: Install and build
-FROM node:20 AS builder
+# ---- Dependencies ----
+FROM base AS deps
 WORKDIR /app
 
-# Copy pruned output from pruner
-COPY --from=pruner /app/out/json/ .
-COPY --from=pruner /app/out/full/ .
+# Copy lockfiles and workspace info first (better caching)
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 
-RUN pnpm install --frozen-lockfile
-RUN pnpm turbo run build --filter=@budmin/backend...
+# Copy backend package.json so pnpm can resolve it
+COPY backend/package.json ./backend/
 
-# Stage 3: Runtime
-FROM node:20 AS runner
+# Install only backend dependencies (workspace-aware)
+RUN pnpm install --filter backend... --frozen-lockfile
+
+# ---- Build ----
+FROM deps AS build
 WORKDIR /app
 
-COPY --from=builder /app/apps/backend/dist ./dist
-COPY --from=builder /app/apps/backend/package.json ./
-COPY --from=builder /app/node_modules ./node_modules
+# Copy the whole monorepo (for shared packages if any)
+COPY . .
 
+# Build backend (if needed, e.g. TypeScript)
+RUN pnpm --filter backend build
+
+# ---- Production ----
+FROM base AS prod
+WORKDIR /app
+
+# Copy only the built backend and its node_modules
+COPY --from=build /app/backend ./backend
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/backend/node_modules ./backend/node_modules
+
+# Expose backend port (change if not 3000)
 EXPOSE 3000
-CMD ["node", "dist/index.js"]
+
+# Start backend
+CMD ["pnpm", "--filter", "backend", "start"]
