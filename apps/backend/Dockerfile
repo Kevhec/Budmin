@@ -12,7 +12,7 @@ WORKDIR /app
 # Install turbo globally using npm (simpler than setting up pnpm global)
 RUN npm install -g turbo
 COPY . .
-RUN turbo prune backend --docker
+RUN turbo prune apps/backend --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
