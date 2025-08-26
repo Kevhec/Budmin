@@ -14,7 +14,7 @@ import {
 } from '@/lib/utils';
 import useBudgets from '@/hooks/useBudgets';
 import ConcurrenceEndDate from '@/components/ConcurrenceEndDate';
-import { concurrenceInit } from '@/lib/constants';
+import { concurrenceInit, localesMap } from '@/lib/constants';
 import {
   type CreateTransactionParams,
   type Transaction,
@@ -100,6 +100,7 @@ export default function TransactionForm({
   const { t, i18n } = useTranslation();
 
   const currentLanguage = i18n.language;
+  const locale = localesMap[currentLanguage as keyof typeof localesMap];
   const languageCode = currentLanguage.split('-')[0];
   const getValue = getModeValue(editMode);
 
@@ -319,8 +320,8 @@ export default function TransactionForm({
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    localeString={currentLanguage}
-                    initialFocus
+                    locale={locale}
+                    autoFocus
                   />
                 </PopoverContent>
               </Popover>

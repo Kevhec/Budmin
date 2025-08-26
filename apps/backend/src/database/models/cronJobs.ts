@@ -51,7 +51,7 @@ CronJob.init({
 }, {
   sequelize,
   timestamps: true,
-  tableName: 'cron-jobs',
+  tableName: 'cron_jobs',
   modelName: 'CronJob',
 });
 

@@ -1,5 +1,5 @@
-import CronTask from '@/src/database/models/cronTask';
-import CronJob from '@/src/database/models/cronJobs';
+import CronTask from '@database/models/cronTask';
+import CronJob from '@database/models/cronJobs';
 import { type Job, scheduleCronTask } from './taskScheduler';
 
 async function loadCronTasks() {

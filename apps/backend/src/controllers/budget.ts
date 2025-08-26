@@ -1,4 +1,4 @@
-import { response, type Request, type Response } from 'express';
+import { type Request, type Response } from 'express';
 import {
   DatabaseError, fn, InferAttributes, literal, Op,
   Sequelize,
@@ -138,7 +138,7 @@ async function getAllBudgets(
       whereClause.createdAt = {
         [Op.between]: [start, end],
       };
-      console.log(whereClause)
+      console.log(whereClause);
     }
   }
 

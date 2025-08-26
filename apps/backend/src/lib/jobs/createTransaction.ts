@@ -1,5 +1,5 @@
-import { Budget, Category, Transaction } from '@/src/database/models';
 import { Transaction as TransactionType } from 'sequelize';
+import { Budget, Category, Transaction } from '@/src/database/models';
 import type { CreateTransactionParams } from '../types';
 
 async function createTransaction(

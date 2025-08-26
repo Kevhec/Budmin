@@ -13,12 +13,14 @@ async function createCategory(
     name,
     color,
     type,
+    key,
   } = req.body;
 
   try {
     const newCategory = await Category.create({
       name,
       color,
+      key,
       isDefault: false,
       userId: req.user?.id || '',
       type,
@@ -98,8 +100,8 @@ async function getCategoriesMonthlyBalance(
   const userId = req.user?.id;
   // TODO: Modify date to work with month and year separately
   const {
-    date
-  } = req.query
+    date,
+  } = req.query;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const whereClause: any = {
@@ -115,7 +117,6 @@ async function getCategoriesMonthlyBalance(
       [Op.between]: [start, end],
     };
   }
-
 
   try {
     const balance = await Transaction.findAll({

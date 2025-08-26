@@ -1,5 +1,6 @@
 import { type SimplifiedConcurrence, type WeekDays } from '@/types';
 import { format } from '@formkit/tempo';
+import { enUS, es } from 'react-day-picker/locale';
 
 const TRANSACTIONS_INITIAL_LIMIT = 5;
 
@@ -52,6 +53,12 @@ const defaultBalance = {
   totalIncome: 0,
 };
 
+// TODO: Modify internal locales to match day picker ones to standardize
+const localesMap = {
+  'es-CO': es,
+  'en-US': enUS,
+};
+
 export {
   dateStringRegex,
   initialPaginatedState,
@@ -64,4 +71,5 @@ export {
   ENGLISH_ORDINALS,
   SPANISH_MONTHS,
   defaultBalance,
+  localesMap,
 };

@@ -1,6 +1,6 @@
 import cron, { type ScheduledTask } from 'node-cron';
-import CronTask from '@/src/database/models/cronTask';
 import { Transaction } from 'sequelize';
+import CronTask from '@/src/database/models/cronTask';
 import {
   JobTypes,
   type CreateBudgetParams,
@@ -109,7 +109,7 @@ async function stopCronTask(
     const task = await CronTask.findByPk(taskId, { transaction });
     if (!task) throw new Error(`Task with ID ${taskId} not found.`);
 
-    task.update({
+    await task.update({
       isFinished: true,
     });
 

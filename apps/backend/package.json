@@ -6,14 +6,19 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup",
     "createMigration": "node ./src/lib/scripts/generateMigration.js",
-    "seedAll": "dotenvx run -f .env.development -- pnpm dlx sequelize-cli db:seed:all",
-    "dev": "dotenvx run -f .env.development -- tsx watch ./src/index.ts"
+    "seedAll:dev": "dotenvx run -f .env.development -- pnpm dlx sequelize-cli db:seed:all",
+    "seedAll:prod": "dotenvx run -f .env.production -- pnpm dlx sequelize-cli db:seed:all",
+    "dev": "dotenvx run -f .env.development -- tsx watch ./src/index.ts",
+    "start": "dotenvx run -f .env.production -- node dist/index.js"
   },
+  "packageManager": "pnpm@10.15.0+sha512.486ebc259d3e999a4e8691ce03b5cac4a71cbeca39372a9b762cb500cfdf0873e2cb16abe3d951b1ee2cf012503f027b98b6584e4df22524e0c7450d9ec7aa7b",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@budmin/eslint-config": "workspace:*",
     "@tsconfig/node16": "^16.1.3",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.7",
@@ -22,7 +27,12 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.14.3",
     "@types/node-cron": "^3.0.11",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "esbuild-fix-imports-plugin": "^1.0.21",
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.32.0",
     "sequelize-cli": "^6.6.2",
+    "tsup": "^8.5.0",
     "tsx": "^4.19.2"
   },
   "dependencies": {
@@ -30,6 +40,7 @@
     "@formkit/tempo": "^0.1.2",
     "@react-email/components": "0.0.25",
     "@react-email/render": "1.0.1",
+    "@sequelize/postgres": "7.0.0-alpha.46",
     "bcrypt": "^5.1.1",
     "chalk": "^5.3.0",
     "cookie-parser": "^1.4.6",

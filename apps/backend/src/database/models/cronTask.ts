@@ -93,7 +93,7 @@ CronTask.init({
 }, {
   sequelize,
   timestamps: true,
-  tableName: 'cron-tasks',
+  tableName: 'cron_tasks',
   modelName: 'CronTask',
 });
 
