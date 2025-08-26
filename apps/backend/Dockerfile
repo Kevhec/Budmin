@@ -1,48 +1,52 @@
 FROM node:18-alpine AS base
-
-# Install pnpm globally in the base image
-RUN npm install -g pnpm
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
 FROM base AS builder
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk update
-RUN apk add --no-cache libc6-compat
-# Set working directory
+RUN apk update && apk add --no-cache libc6-compat
 WORKDIR /app
-# Install turbo globally using npm (simpler than setting up pnpm global)
 RUN npm install -g turbo
 COPY . .
 RUN turbo prune @budmin/backend --docker
 
-# Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
-RUN apk update
-RUN apk add --no-cache libc6-compat
+RUN apk update && apk add --no-cache libc6-compat
 WORKDIR /app
 
-# First install dependencies (as they change less often)
+# First install the dependencies (as they change less often)
+COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
-RUN pnpm install
+COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=builder /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
+
+# Install dependencies using pnpm fetch for better Docker caching
+RUN pnpm fetch --prod
+RUN pnpm install -r --offline --prod
 
 # Build the project and its dependencies
 COPY --from=builder /app/out/full/ .
 
-# Uncomment and use build args to enable remote caching
-# ARG TURBO_TEAM
-# ENV TURBO_TEAM=$TURBO_TEAM
-
-# ARG TURBO_TOKEN
-# ENV TURBO_TOKEN=$TURBO_TOKEN
-
-RUN pnpm turbo build
+# Install dev dependencies and build
+RUN pnpm install -r --offline
+RUN turbo build --filter=@budmin/backend
 
 FROM base AS runner
 WORKDIR /app
 
 # Don't run production as root
-RUN addgroup --system --gid 1001 expressjs
-RUN adduser --system --uid 1001 expressjs
-USER expressjs
-COPY --from=installer /app .
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-CMD node apps/backend/dist/index.js
+# Copy the built application
+COPY --from=installer --chown=nextjs:nodejs /app/apps/backend/dist ./apps/backend/dist
+COPY --from=installer --chown=nextjs:nodejs /app/apps/backend/package.json ./apps/backend/package.json
+
+# Copy any necessary shared packages/node_modules
+COPY --from=installer --chown=nextjs:nodejs /app/node_modules ./node_modules
+
+USER nextjs
+
+EXPOSE 3000
+
+CMD ["node", "apps/backend/dist/index.js"]
