@@ -17,7 +17,7 @@ import cliTheme from './lib/utils/chalk.js';
 const sequelize = SequelizeConnection.getInstance();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // CORS Options
 const allowedDomains = [process.env.FRONTEND_URL];

@@ -8,7 +8,7 @@ services:
       dockerfile: ./apps/backend/Dockerfile
     restart: always
     ports:
-      - 3000:3000
+      - 3001:3001
     networks:
       - app_network
     environment:
@@ -18,4 +18,4 @@ services:
 # with each other, by using their container name as a hostname
 networks:
   app_network:
-    driver: bridge
+    external: true
