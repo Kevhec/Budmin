@@ -14,7 +14,9 @@ export default defineConfig({
   keepNames: true,
   tsconfig: './tsconfig.json',
   onSuccess: async () => {
-    execSync('cp ./ca.pem dist/');
+    if (process.env.NODE_ENV === 'development') {
+      execSync('cp ./ca.pem dist/');
+    }
   },
   esbuildPlugins: [
     fixImportsPlugin(),
