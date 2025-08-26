@@ -4,7 +4,10 @@ import cookieParser from 'cookie-parser';
 import { SequelizeStorage, Umzug } from 'umzug';
 import responseInterceptor from './middleware/interceptors.js';
 import {
-  budgetRoutes, transactionRoutes, pageRouter, userRoutes,
+  budgetRoutes,
+  transactionRoutes,
+  pageRouter,
+  userRoutes,
   categoryRouter,
 } from './router/index.js';
 import SequelizeConnection from './database/config/SequelizeConnection.js';
@@ -42,9 +45,22 @@ app.use('/api/transaction', transactionRoutes);
 app.use('/api/page', pageRouter);
 app.use('/api/category', categoryRouter);
 
-sequelize.sync().then(async () => {
-  console.log(`${cliTheme.db('[SEQUELIZE]')}: Database synchronized`);
-});
+function init() {
+  sequelize
+    .createSchema(process.env.DB_SCHEMA || 'public', { logging: console.log })
+    .catch(() => {
+      console.log('Schema already exists');
+    });
+
+  sequelize
+    .sync()
+    .then(async () => {
+      console.log(`${cliTheme.db('[SEQUELIZE]')}: Database synchronized`);
+    })
+    .catch((err) => console.log(`Error synchronizing database: ${err}`));
+}
+
+init();
 
 // UMZUG (migrations tool)
 const runMigrations = async () => {
@@ -64,7 +80,9 @@ runMigrations().catch((error) => {
   process.exit(1);
 });
 
-startCronManager();
+startCronManager().catch((err) => {
+  console.log(`error starting cron manager: ${err}`);
+});
 
 app.listen(PORT, () => {
   console.log(

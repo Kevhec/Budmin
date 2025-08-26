@@ -1,7 +1,7 @@
-import { Models } from '@/src/lib/types';
 import {
   CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model,
 } from 'sequelize';
+import { Models } from '@/src/lib/types';
 import SequelizeConnection from '../config/SequelizeConnection';
 
 enum SupportedCurrencies {
@@ -88,7 +88,7 @@ UserPreferences.init({
 }, {
   sequelize,
   timestamps: true,
-  tableName: 'user-preferences',
+  tableName: 'user_preferences',
   modelName: 'UserPreferences',
 });
 

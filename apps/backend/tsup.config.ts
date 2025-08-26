@@ -1,8 +1,9 @@
 import { defineConfig } from 'tsup'
 import { fixImportsPlugin } from "esbuild-fix-imports-plugin";
+import { execSync } from 'child_process';
 
 export default defineConfig({
-  entry: ['src/**/*.{ts,tsx}'],
+  entry: ['src/**/*.{ts,js}'],
   format: ['esm'],
   target: 'node18',
   outDir: 'dist',
@@ -12,6 +13,9 @@ export default defineConfig({
   bundle: true,
   keepNames: true,
   tsconfig: './tsconfig.json',
+  onSuccess: async () => {
+    execSync('cp ./ca.pem dist/');
+  },
   esbuildPlugins: [
     fixImportsPlugin(),
   ],
