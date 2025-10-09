@@ -1,0 +1,17 @@
+apps/frontend
+packages/ui
+packages/tailwind-config
+packages/eslint-config
+packages/typescript-config
+pnpm-lock.yaml
+pnpm-workspace.yaml
+package.json
+.dockerignore
+turbo.json
+vercel.json
+README.md
+.npmrc
+.gitignore
+.eslintignore
+.vscode
+.turbo

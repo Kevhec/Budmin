@@ -1,6 +1,6 @@
-import { cliTheme } from '@lib/utils';
 import { type Dialect, Options, Sequelize } from 'sequelize';
 import fs from 'fs';
+import logger from '@/src/lib/utils/logger';
 
 class SequelizeConnection {
   private static instance: Sequelize;
@@ -22,7 +22,7 @@ class SequelizeConnection {
       define: {
         schema,
       },
-      logging: (...msg) => console.log(`${cliTheme.db('[SEQUELIZE]')}: ${msg}`),
+      logging: (...msg) => logger.sequelize(`${msg}`),
     };
 
     if (withSsl && dbDriver === 'postgres') {
@@ -45,9 +45,9 @@ class SequelizeConnection {
     SequelizeConnection.instance
       .authenticate()
       .then(() => {
-        console.log('Sequelize connected');
+        logger.sequelize('Sequelize connected');
       })
-      .catch((err) => console.log(`ERROR CONNECTING DB: ${err}`));
+      .catch((err) => logger.error(`ERROR CONNECTING DB: ${err}`));
   }
 
   public static getInstance(): Sequelize {

@@ -202,7 +202,7 @@ export default function SignUp() {
                   {
                     error && (
                       <Typography>
-                        {error}
+                        {error.message}
                       </Typography>
                     )
                   }

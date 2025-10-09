@@ -455,5 +455,37 @@
     "dialog": {
       "graphHeading": "Budget Evolution"
     }
+  },
+  "apiResponse": {
+    "auth": {
+      "verifyToken": {
+        "success": "Email verified — welcome!",
+        "error": "This verification link has expired."
+      }
+    }
+  },
+  "verifyAccount": {
+    "errors": {
+      "expiredToken": {
+        "title": "Verification Link Expired",
+        "body": "This verification link has expired for security reasons. We can send you a fresh one to complete your verification to the email"
+      },
+      "invalidToken": {
+        "title": "Invalid link",
+        "body": "That link doesn't look right. If you requested verification, please request a new link."
+      },
+      "serverError": {
+        "title": "Server error",
+        "body": "A problem occurred while processing the verification. Please try again later."
+      }
+    },
+    "success": {
+      "title": "Account verified",
+      "body": "Your email address has been verified. You can log in by clicking the button below!"
+    },
+    "actions": {
+      "sendNewEmail": "Send New Verification Email",
+      "backToLogin": "Back to Login"
+    }
   }
 }

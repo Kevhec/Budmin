@@ -2,6 +2,8 @@ import express from 'express';
 import cors, { type CorsOptions } from 'cors';
 import cookieParser from 'cookie-parser';
 import { SequelizeStorage, Umzug } from 'umzug';
+import loggerHttp from 'pino-http';
+import logger from '@lib/utils/logger';
 import responseInterceptor from './middleware/interceptors.js';
 import {
   budgetRoutes,
@@ -36,6 +38,9 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+app.use(loggerHttp({
+  logger,
+}));
 
 app.use(responseInterceptor);
 
@@ -49,44 +54,41 @@ function init() {
   sequelize
     .createSchema(process.env.DB_SCHEMA || 'public', { logging: console.log })
     .catch(() => {
-      console.log('Schema already exists');
+      logger.error('Schema already exists');
     });
 
   sequelize
     .sync()
     .then(async () => {
-      console.log(`${cliTheme.db('[SEQUELIZE]')}: Database synchronized`);
+      logger.sequelize('Database synchronized');
     })
-    .catch((err) => console.log(`Error synchronizing database: ${err}`));
+    .catch((err) => logger.error(`Error synchronizing database: ${err}`));
 }
 
 init();
 
 // UMZUG (migrations tool)
 const runMigrations = async () => {
-  console.log(`${cliTheme.server('[SERVER]')}: Initializing umzug`);
+  logger.server('Initializing umzug');
   const umzug = new Umzug({
     migrations: { glob: 'src/database/migrations/*.cjs' },
     context: sequelize.getQueryInterface(),
     storage: new SequelizeStorage({ sequelize }),
-    logger: console,
+    logger,
   });
 
   await umzug.up();
 };
 
 runMigrations().catch((error) => {
-  console.log(`${cliTheme.serverWarn('[ERROR]')}: Migration failed: `, error);
+  logger.error('Migration failed: ', error);
   process.exit(1);
 });
 
 startCronManager().catch((err) => {
-  console.log(`error starting cron manager: ${err}`);
+  logger.error(`error starting cron manager: ${err}`);
 });
 
 app.listen(PORT, () => {
-  console.log(
-    `\n${cliTheme.server('[Server]')}: listening to port ${PORT}
-          at ${cliTheme.underline('http://localhost:3000/')}\n`,
-  );
+  logger.server(`listening to port ${PORT} at ${cliTheme.underline('http://localhost:3000/')}`);
 });

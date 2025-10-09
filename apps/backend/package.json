@@ -10,7 +10,7 @@
     "createMigration": "node ./src/lib/scripts/generateMigration.js",
     "seedAll:dev": "dotenvx run -f .env.development -- pnpm dlx sequelize-cli db:seed:all",
     "seedAll:prod": "dotenvx run -f .env.production -- pnpm dlx sequelize-cli db:seed:all",
-    "dev": "dotenvx run -f .env.development -- tsx watch ./src/index.ts",
+    "dev": "dotenvx run -f .env.development -- tsx watch ./src/index.ts | pino-pretty",
     "start": "dotenvx run -f .env.production -- node dist/index.js"
   },
   "packageManager": "pnpm@10.15.0+sha512.486ebc259d3e999a4e8691ce03b5cac4a71cbeca39372a9b762cb500cfdf0873e2cb16abe3d951b1ee2cf012503f027b98b6584e4df22524e0c7450d9ec7aa7b",
@@ -31,6 +31,7 @@
     "esbuild-fix-imports-plugin": "^1.0.21",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.32.0",
+    "pino-pretty": "^13.1.1",
     "sequelize-cli": "^6.6.2",
     "tsup": "^8.5.0",
     "tsx": "^4.19.2"
@@ -43,6 +44,7 @@
     "@sequelize/postgres": "7.0.0-alpha.46",
     "bcrypt": "^5.1.1",
     "chalk": "^5.3.0",
+    "colorette": "^2.0.20",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "cron-parser": "^4.9.0",
@@ -52,6 +54,8 @@
     "node-cron": "^3.0.3",
     "pg": "^8.11.5",
     "pg-hstore": "^2.3.4",
+    "pino": "^10.0.0",
+    "pino-http": "^11.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "resend": "^4.0.0",

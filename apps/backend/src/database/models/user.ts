@@ -4,6 +4,7 @@ import {
   type CreationOptional,
   type InferAttributes,
   type InferCreationAttributes,
+  Op,
 } from 'sequelize';
 import type { Models } from '@/src/lib/types';
 import SequelizeConnection from '../config/SequelizeConnection';
@@ -83,9 +84,9 @@ User.init({
     defaultValue: 'user',
   },
   token: {
-    type: DataTypes.UUID,
+    type: DataTypes.TEXT,
     allowNull: true,
-    defaultValue: DataTypes.UUIDV4,
+    defaultValue: null,
   },
   confirmed: {
     type: DataTypes.BOOLEAN,
@@ -111,6 +112,13 @@ User.init({
       }
     },
   },
+  indexes: [
+    {
+      name: 'users_token_index',
+      fields: ['token'],
+      where: { token: { [Op.ne]: null } },
+    },
+  ],
 });
 
 export default User;

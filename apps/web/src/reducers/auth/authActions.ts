@@ -6,6 +6,9 @@ import type {
 } from '@/types';
 import { AuthActionType } from '@/types';
 import axiosClient from '@/config/axios';
+import i18next from '@/i18n';
+
+const { t } = i18next;
 
 async function login(dispatch: Dispatch<AuthAction>, credentials: AuthLoginUser) {
   dispatch({ type: AuthActionType.SET_LOADING, payload: true });
@@ -55,7 +58,7 @@ async function signUp(
   });
   dispatch({
     type: AuthActionType.SET_ERROR,
-    payload: '',
+    payload: null,
   });
   dispatch({
     type: AuthActionType.SET_FINISHED_ASYNC_ACTION,
@@ -86,7 +89,11 @@ async function signUp(
   } catch (error: any) {
     dispatch({
       type: AuthActionType.SET_ERROR,
-      payload: error.response.data.error,
+      payload: {
+        status: 'error',
+        code: 'internal_error',
+        message: error.response.data.error,
+      },
     });
   } finally {
     dispatch({ type: AuthActionType.SET_LOADING, payload: false });
@@ -139,20 +146,67 @@ async function verifyToken(dispatch: Dispatch<AuthAction>, token: string) {
   });
   dispatch({
     type: AuthActionType.SET_ERROR,
-    payload: '',
+    payload: null,
   });
 
   try {
-    const { data } = await axiosClient.post<MessageResponse>(`/user/verify/${token || ''}`);
+    await axiosClient.post<MessageResponse>(`/user/verify/${token || ''}`);
 
     dispatch({
       type: AuthActionType.SET_MESSAGE,
-      payload: data.data.message,
+      payload: t('apiResponse.auth.verifyToken.success'),
     });
   } catch (error: any) {
     dispatch({
       type: AuthActionType.SET_ERROR,
-      payload: error.response.data.error,
+      payload: {
+        status: error.response.data.error.status,
+        code: error.response.data.error.code,
+        message: t('apiResponse.auth.verifyToken.error'),
+        maskedEmail: error.response.data.error.maskedEmail,
+        retryToken: error.response.data.error.token,
+      },
+    });
+  } finally {
+    dispatch({ type: AuthActionType.SET_LOADING, payload: false });
+    dispatch({ type: AuthActionType.SET_FINISHED_ASYNC_ACTION, payload: true });
+  }
+}
+
+async function resendVerification(dispatch: Dispatch<AuthAction>, token: string) {
+  dispatch({ type: AuthActionType.SET_LOADING, payload: true });
+  dispatch({ type: AuthActionType.SET_FINISHED_ASYNC_ACTION, payload: false });
+  dispatch({
+    type: AuthActionType.SET_MESSAGE,
+    payload: '',
+  });
+  dispatch({
+    type: AuthActionType.SET_ERROR,
+    payload: null,
+  });
+
+  try {
+    await axiosClient.post(`/user/verify/resend/${token || ''}`);
+
+    dispatch({
+      type: AuthActionType.SET_MESSAGE,
+      payload: t(''),
+    });
+  } catch (error: any) {
+    dispatch({
+      type: AuthActionType.SET_RETRY_TOKEN,
+      payload: error.response.data.error.token || undefined,
+    });
+
+    dispatch({
+      type: AuthActionType.SET_ERROR,
+      payload: {
+        status: error.response.data.error.status,
+        code: error.response.data.error.code,
+        message: t('apiResponse.auth.verifyToken.error'),
+        maskedEmail: error.response.data.error.maskedEmail,
+        retryToken: error.response.data.error.token,
+      },
     });
   } finally {
     dispatch({ type: AuthActionType.SET_LOADING, payload: false });
@@ -167,4 +221,5 @@ export {
   logout,
   checkAuth,
   verifyToken,
+  resendVerification,
 };

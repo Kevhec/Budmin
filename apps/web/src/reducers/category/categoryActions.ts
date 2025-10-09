@@ -14,6 +14,8 @@ async function syncCategories(dispatch: Dispatch<CategoryAction>) {
   try {
     const newCategories = await getCategories();
 
+    console.log({ newCategories });
+
     if (!newCategories) return;
 
     dispatch({
@@ -21,6 +23,7 @@ async function syncCategories(dispatch: Dispatch<CategoryAction>) {
       payload: newCategories,
     });
   } catch (error: any) {
+    console.log({ error });
     throw new Error(error.message);
   } finally {
     dispatch({

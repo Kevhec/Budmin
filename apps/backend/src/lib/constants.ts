@@ -11,6 +11,7 @@ const CONCURRENCE_TYPE = ['daily', 'weekly', 'monthly', 'semestrial', 'yearly'] 
 
 const WEEKDAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const;
 
+// TODO: Update code to stop using hardcoded translations, use i18next
 const ENGLISH_ORDINALS = ['first', 'second', 'third', 'fourth', 'fifth'] as const;
 
 export {

@@ -5,6 +5,7 @@ import {
 import { ENGLISH_ORDINALS } from '../../constants';
 import getDayOrdinalNumber from '../time/getDayOrinalNumber';
 import getDefaultRecurrence from '../time/getDefaultConcurrence';
+import logger from '../logger';
 
 function parseConcurrence(
   concurrence: Concurrence,
@@ -51,7 +52,7 @@ function parseConcurrence(
     ? ENGLISH_ORDINALS[weekDayOrdinalIndex] as Ordinals
     : undefined;
 
-  console.log({ ordinal });
+  logger.info({ ordinal });
 
   const recurrence: ParsedConcurrence = {
     recurrence: {

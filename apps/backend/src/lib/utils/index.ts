@@ -8,4 +8,6 @@ export { default as verificationEmail } from './verificationEmail';
 export { default as strReplaceAt } from './strReplaceAt';
 export { default as cliTheme } from './chalk';
 export { default as parseIncludes } from './parseIncludes';
+export { default as verifyJWT } from './verifyJWT';
 export * from './time';
+export * from './math';
