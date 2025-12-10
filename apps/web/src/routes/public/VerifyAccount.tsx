@@ -1,7 +1,6 @@
 import useAuth from '@/hooks/useAuth';
 import { useEffect } from 'react';
-import { Navigate, NavLink, useParams } from 'react-router';
-import Countdown from 'react-countdown';
+import { NavLink, useParams } from 'react-router';
 import { Button } from '@budmin/ui';
 import {
   Typography,
@@ -16,26 +15,15 @@ export default function VerifyAccount() {
     verifyToken,
   } = useAuth();
 
-  const countdownRenderer: (...args: any[]) => any = ({ seconds, completed }) => {
-    if (completed) {
-      return <Navigate to="/" replace />;
+  useEffect(() => {
+    if (!loading && !finishedAsyncAction) {
+      verifyToken(token || '');
     }
-
-    return (
-      <Typography variant="span" className="w-32 aspect-square border-2 border-slate-600 rounded-full grid place-content-center text-3xl font-bold mx-auto mt-4 text-slate-600 text-center tabular-nums">
-        {seconds}
-        {' '}
-        <Typography variant="span" className="text-xl font-medium text-center">
-          Segundo
-          {Number(seconds) === 1 ? '' : 's'}
-        </Typography>
-      </Typography>
-    );
-  };
+  }, [token, loading, finishedAsyncAction, verifyToken]);
 
   useEffect(() => {
-    verifyToken(token || '');
-  }, [token, verifyToken]);
+    console.log(error);
+  }, [error]);
 
   return (
     <main className="text-center">
@@ -59,10 +47,6 @@ export default function VerifyAccount() {
               </div>
               <div>
                 <Typography>Serás redirigido a la página de inicio en:</Typography>
-                <Countdown
-                  date={Date.now() + 5000}
-                  renderer={countdownRenderer}
-                />
                 <div className="mt-4 space-y-2">
                   <Typography>
                     Si no eres redirigido automáticamente
