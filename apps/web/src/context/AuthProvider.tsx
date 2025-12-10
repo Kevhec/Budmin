@@ -15,7 +15,6 @@ import {
   loginGuest as loginGuestAction,
   verifyToken as verifyTokenAction,
   signUp as signUpAction,
-  resendVerification as resendVerificationAction,
 } from '@/reducers/auth/authActions';
 
 interface Props {
@@ -51,10 +50,6 @@ export function AuthProvider({ children }: Props) {
     signUpAction(dispatch, credentials);
   }, []);
 
-  const resendVerification = useCallback((token: string) => {
-    resendVerificationAction(dispatch, token);
-  }, []);
-
   const contextValue = useMemo<AuthContextType>(() => ({
     state,
     loginGuest,
@@ -62,8 +57,7 @@ export function AuthProvider({ children }: Props) {
     signUp,
     logout,
     verifyToken,
-    resendVerification,
-  }), [state, verifyToken, signUp, resendVerification]);
+  }), [state, verifyToken, signUp]);
 
   if (state.loading && !state.user.id) {
     return <p>LOADING</p>;

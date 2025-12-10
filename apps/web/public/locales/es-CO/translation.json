@@ -453,38 +453,5 @@
     "dialog": {
       "graphHeading": "Evolución del presupuesto"
     }
-  },
-  "apiResponse": {
-    "auth": {
-      "verifyToken": {
-        "success": "Correo verificado — ¡bienvenido!",
-        "error": "Este enlace de verificación venció."
-      }
-    }
-  },
-  "verifyAccount": {
-    "errors": {
-      "expiredToken": {
-        "title": "Enlace de verificación expirado",
-        "body": "Este enlace de verificación ha expirado por razones de seguridad. Podemos enviarte uno nuevo para completar la verificación al correo electrónico"
-      },
-      "invalidToken": {
-        "title": "Enlace no válido",
-        "body": "Este enlace no parece correcto. Si solicitaste verificación, solicita un nuevo enlace."
-      },
-      "serverError": {
-        "title": "Error del servidor",
-        "body": "Ha ocurrido un problema al procesar la verificación. Inténtalo de nuevo más tarde."
-      }
-    },
-    "success": {
-      "title": "Cuenta verificada",
-      "body": "Tu dirección de correo ha sido verificada. ¡Puedes iniciar sesión haciendo click al botón de abajo!"
-    },
-    "actions": {
-      "sendNewEmail": "Enviar correo de verificación",
-      "backToLogin": "Volver al inicio"
-    }
-  },
-  "yes": "Send New Verification Email"
+  }
 }

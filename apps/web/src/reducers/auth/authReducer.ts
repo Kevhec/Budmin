@@ -14,8 +14,7 @@ const initialAuthState: AuthState = {
   loading: true,
   finishedAsyncAction: false,
   message: '',
-  error: null,
-  retryToken: undefined,
+  error: '',
 };
 
 function authReducer(
@@ -51,11 +50,6 @@ function authReducer(
       return ({
         ...state,
         message: action.payload,
-      });
-    case AuthActionType.SET_RETRY_TOKEN:
-      return ({
-        ...state,
-        retryToken: action.payload,
       });
     case AuthActionType.SET_LOADING:
       return ({

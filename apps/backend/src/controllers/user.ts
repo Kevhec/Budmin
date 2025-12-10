@@ -1,6 +1,5 @@
 import type { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { diffMinutes } from '@formkit/tempo';
 import {
   Budget, Transaction, User,
   UserPreferences,
@@ -12,17 +11,10 @@ import verificationEmail from '../lib/utils/verificationEmail';
 import sanitizeObject from '../lib/utils/sanitizeObject';
 import setCookie from '../lib/utils/setCookie';
 import SequelizeConnection from '../database/config/SequelizeConnection';
-import type {
-  CreateUserRequestBody, ResponseObject, TokenVerificationCodes, TypedRequest,
-} from '../lib/types';
-import maskEmail from '../lib/utils/maskEmail';
-import { verifyJWT } from '../lib/utils';
-import logger from '../lib/utils/logger';
+import type { CreateUserRequestBody, TypedRequest } from '../lib/types';
 
 const sequelize = SequelizeConnection.getInstance();
 const isProduction = process.env.NODE_ENV === 'production';
-const NUMERIC_TOKEN_EXPIRATION_TIME = 20;
-const TEXT_BASED_TOKEN_EXPIRATION_TIME = `${NUMERIC_TOKEN_EXPIRATION_TIME}s`;
 
 const signUp = async (
   req: TypedRequest<CreateUserRequestBody>,
@@ -35,6 +27,9 @@ const signUp = async (
     password,
     timezone,
   } = req.body;
+
+  console.log({ birthday });
+
   // TODO: Delete accounts that are not verified on a week, provide a warning message;
 
   try {
@@ -60,32 +55,26 @@ const signUp = async (
       return res.status(409).json('Datos incorrectos');
     }
 
-    const confirmationToke = generateJWT(
-      { userId: newUser.get('id') },
-      { expiresIn: TEXT_BASED_TOKEN_EXPIRATION_TIME, issuer: 'budmin', audience: 'email-verification' },
-    );
-
-    await newUser.update({ token: confirmationToke });
-
     // Testing email delivered@resend.dev
-    await verificationEmail(isProduction ? newUser.email : 'delivered@resend.dev', confirmationToke || '');
+    await verificationEmail(isProduction ? newUser.email : 'delivered@resend.dev', newUser.token || '');
 
     const plainUserObj = newUser.toJSON();
-    const plainPreferences = sanitizeObject(newPreferences.toJSON(), ['userId']);
-    plainUserObj.preferences = plainPreferences;
+    plainUserObj.preferences = newPreferences;
 
     // Sanitize user object in order to avoid sending sensitive data to frontend
-    sanitizeObject(plainUserObj, ['password', 'token']);
+    const sanitizedUser = sanitizeObject(plainUserObj, ['password', 'token']);
+
+    console.log(sanitizedUser);
 
     // Send user
     return res.status(201).json({
       data: {
-        message: `User registered successfully, verification email sent to: ${email}`,
+        message: 'Usuario registrado correctamente',
       },
     });
   } catch (e: unknown) {
     if (e instanceof Error) {
-      logger.error(e.message);
+      console.error(e.message);
     }
     return res.status(500).json('Internal server error');
   }
@@ -95,128 +84,23 @@ const verifyToken = async (req: Request, res: Response) => {
   const { token } = req.params;
 
   try {
-    const { error, data, meta } = verifyJWT(token);
-    const { userId } = data || {};
-    logger.info({
-      userId, error, meta, data,
-    });
-    const responseObject: ResponseObject<TokenVerificationCodes> & {
-      maskedEmail?: string, token?: string
-    } = {
-      status: 'success', code: 'success', message: 'User verified successfully.',
-    };
+    // Find user which token matches the one sent to it's email
+    const userToConfirm = await User.findOne({ where: { token } });
 
-    const isTokenInvalid = !meta || error === 'invalid';
-
-    const user = await (userId
-      ? User.findByPk(userId)
-      : User.findOne({ where: { token } })
-    );
-
-    if (isTokenInvalid || !user) {
-      responseObject.status = 'error';
-      responseObject.code = 'invalid_token';
-      responseObject.message = 'Invalid token';
-
-      return res.status(401).json(responseObject);
+    if (!userToConfirm) {
+      return res.status(404).json('Invalid or expired token.');
     }
 
-    if (error === 'expired') {
-      responseObject.status = 'error';
-      responseObject.code = 'expired_token';
-      responseObject.message = 'Expired token';
-      responseObject.maskedEmail = maskEmail(user.get('email'));
-      responseObject.token = generateJWT(
-        { userId: user.get('id') },
-        { audience: 'email-verification', issuer: 'budmin', expiresIn: TEXT_BASED_TOKEN_EXPIRATION_TIME },
-      );
-      return res.status(410).json(responseObject);
-    }
-
-    await user.update({
+    // Update user's record as a confirmed user
+    await userToConfirm.update({
       token: null,
       confirmed: true,
     });
 
-    // TODO: Standardize responses with upper "responseObject" format
-    return res.status(200).json(responseObject);
+    return res.status(200).json({ message: 'User confirmed successfully.' });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(error.message);
-    }
-    return res.status(500).json('Internal server error');
-  }
-};
-
-const resendVerificationEmail = async (
-  req: TypedRequest<{ token: string }>,
-  res: Response,
-) => {
-  const { token } = req.params;
-
-  try {
-    const { error, data, meta } = verifyJWT(token);
-    const responseObject: ResponseObject<TokenVerificationCodes> & {
-      maskedEmail?: string, token?: string, timeToRetry?: number
-    } = {
-      status: 'success', code: 'success', message: 'User verified successfully.',
-    };
-
-    const { userId } = data || {};
-
-    const isTokenInvalid = !meta || error === 'invalid';
-
-    /*     if (isTokenValid && meta.iat) {
-      const issueDate = new Date(meta.iat * 1000);
-      const today = new Date();
-
-      const minutesDiff = diffMinutes(today, issueDate, 'floor');
-      logger.info(minutesDiff);
-
-      if (minutesDiff < NUMERIC_TOKEN_EXPIRATION_TIME) {
-        const timeUntilRetry = minutesDiff - NUMERIC_TOKEN_EXPIRATION_TIME;
-
-        responseObject.status = 'error';
-        responseObject.code = 'rate_limited';
-        responseObject.message = `Cannot request another email yet, try again in ${timeUntilRetry} minutes`;
-        responseObject.timeToRetry = timeUntilRetry;
-
-        return res.status(401).json(responseObject);
-      }
-    } */
-
-    const user = await (userId
-      ? User.findByPk(userId)
-      : User.findOne({ where: { token } })
-    );
-
-    if (isTokenInvalid || !user) {
-      responseObject.status = 'error';
-      responseObject.code = 'invalid_token';
-      responseObject.message = 'Invalid token';
-
-      return res.status(401).json(responseObject);
-    }
-
-    if (error === 'expired') {
-      responseObject.status = 'error';
-      responseObject.code = 'expired_token';
-      responseObject.message = 'Expired token';
-      responseObject.maskedEmail = maskEmail(user.get('email'));
-      responseObject.token = generateJWT(
-        { userId: user.get('id') },
-        { audience: 'email-verification', issuer: 'budmin', expiresIn: TEXT_BASED_TOKEN_EXPIRATION_TIME },
-      );
-
-      await user.update({ token: responseObject.token });
-      await verificationEmail(isProduction ? user.get('email') : 'delivered@resend.dev', responseObject.token || '');
-      return res.status(401).json(responseObject);
-    }
-
-    return res.status(200).json(responseObject);
-  } catch (e: unknown) {
-    if (e instanceof Error) {
-      console.error(e.message);
     }
     return res.status(500).json('Internal server error');
   }
@@ -226,7 +110,7 @@ const logIn = async (req: Request, res: Response) => {
   try {
     const { email, password, remember } = req.body;
 
-    // Set different token expiration time if user wants to be remembered
+    // Set different token expiration time if user want's to be remembered
     const expirationTime = remember
       ? REMEMBER_ME_EXPIRATION_TIME_DAYS
       : SESSION_EXPIRATION_TIME_DAYS;
@@ -247,7 +131,7 @@ const logIn = async (req: Request, res: Response) => {
 
     // If it's a match, generate a jwt and send it through a session cookie
     if (isSame) {
-      const token = generateJWT({ id: user?.id }, { expiresIn: convert(expirationTime, 'day', 'second') });
+      const token = generateJWT({ id: user?.id }, convert(expirationTime, 'day', 'second'));
 
       setCookie(res, 'jwt', token, {
         maxAge:
@@ -332,7 +216,7 @@ const loginAsGuest = async (req: Request, res: Response) => {
 
     // generate jwt for guest user with one week expiration in order to avoid
     // unused guest users in database
-    const token = generateJWT({ id: newGuest.id }, { expiresIn: convert(7, 'day', 'second') });
+    const token = generateJWT({ id: newGuest.id }, convert(7, 'day', 'second'));
 
     // set the same maxAge for cookies but in ms
     setCookie(res, 'jwt', token, {
@@ -376,7 +260,6 @@ const getInfo = async (req: Request, res: Response) => {
 export {
   signUp,
   verifyToken,
-  resendVerificationEmail,
   logIn,
   logOut,
   loginAsGuest,

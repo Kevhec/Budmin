@@ -16,8 +16,6 @@ import type {
   CronTask,
 } from '../database/models';
 
-// TODO: Organize type definitions on different files
-
 export interface BalanceResponse {
   year: string
   month: string
@@ -219,11 +217,3 @@ export interface Target<T> {
 }
 
 export type UserAttributes = InferAttributes<User>;
-
-export interface ResponseObject<T extends string> {
-  status: 'success' | 'error'
-  code: T
-  message: string
-}
-
-export type TokenVerificationCodes = 'success' | 'invalid_token' | 'expired_token' | 'rate_limited';

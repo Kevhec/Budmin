@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import readline from 'readline';
 import { exec } from 'child_process';
-import logger from '../utils/logger';
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -10,29 +9,29 @@ const rl = readline.createInterface({
 
 rl.question('Enter migration name: ', (migrationName) => {
   if (!migrationName) {
-    logger.error('Migration name is required, please re-execute.');
+    console.error('Migration name is required, please re-execute.');
     rl.close();
     process.exit(1);
   }
 
   const command = `dotenvx run -f .env.development -- pnpm dlx sequelize-cli migration:generate --name ${migrationName}`;
-  logger.info('Creating migration by running');
-  logger.info(command);
+  console.log('Creating migration by running');
+  console.log(command);
 
   exec(command, (error, stdout, stderr) => {
     if (error) {
-      logger.error(`Error: ${error.message}`);
+      console.error(`Error: ${error.message}`);
       rl.close();
       process.exit(1);
     }
 
     if (stderr) {
-      logger.error(`stderr: ${stderr}`);
+      console.error(`stderr: ${stderr}`);
     }
 
-    logger.info('REMEMBER to change file format to cjs to work with Umzug.');
+    console.log('REMEMBER to change file format to cjs to work with Umzug.');
 
-    logger.info(stdout);
+    console.log(stdout);
     rl.close();
   });
 });

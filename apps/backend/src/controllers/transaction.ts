@@ -27,7 +27,6 @@ import { stopCronTask } from '../lib/cron_manager/taskScheduler';
 import deleteCronTask from '../lib/cron_manager/deleteCronTask';
 import deleteConcurrence from '../lib/cron_manager/deleteConcurrence';
 import renameObjectKey from '../lib/utils/renameObjectKey';
-import logger from '../lib/utils/logger';
 
 const sequelize = SequelizeConnection.getInstance();
 
@@ -124,7 +123,7 @@ async function createTransaction(
       }
     }
 
-    logger.error(error);
+    console.log(error);
 
     return res.status(500).json('Internal server error');
   }
@@ -225,6 +224,7 @@ async function getAllTransactions(
     });
 
     const concurrenceRenamedRows = rows.map((transaction) => {
+      console.log({ transaction: transaction.toJSON() });
       const renamedTransaction = renameObjectKey(transaction.toJSON(), 'transactionConcurrence', 'concurrence');
       return renamedTransaction;
     });
@@ -507,12 +507,14 @@ async function updateTransaction(
     if (error instanceof DatabaseError) {
       const sequelizeError = error as { parent?: { code?: string, detail?: string } };
 
-      // Foreign key violation error 23503
       if (sequelizeError.parent && sequelizeError.parent.code === '23503') {
-        return res.status(409).json(sequelizeError.parent.detail);
+        if (sequelizeError.parent && sequelizeError.parent.code === '23503') {
+          return res.status(409).json(sequelizeError.parent.detail);
+        }
       }
+    } else if (error instanceof Error) {
+      console.log('Errorrrrr: ', error);
     }
-
     return res.status(500).json('Internal server error');
   }
 }
@@ -546,7 +548,7 @@ async function deleteTransaction(
 
     if (currentTask) {
       const taskId = currentTask.id;
-      await stopCronTask(taskId, { transaction: t });
+      stopCronTask(taskId, { transaction: t });
       await deleteCronTask(taskId, { transaction: t });
     }
 

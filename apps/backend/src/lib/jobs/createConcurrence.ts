@@ -1,5 +1,5 @@
-import { Transaction } from 'sequelize';
 import Concurrence from '@/src/database/models/concurrence';
+import { Transaction } from 'sequelize';
 import {
   TargetType,
   Target,
@@ -7,7 +7,6 @@ import {
   UserAttributes,
 } from '../types';
 import parseConcurrenceObj from './parseConcurrenceObj';
-import logger from '../utils/logger';
 
 interface CreationParams {
   concurrence: ConcurrenceType,
@@ -20,7 +19,7 @@ async function createConcurrence(
   { transaction }: { transaction?: Transaction } = {},
 ) {
   try {
-    logger.info({ target });
+    console.log({ target });
     const parsedConcurrenceObject = parseConcurrenceObj(concurrence);
 
     const newConcurrence = await Concurrence.create({
@@ -33,7 +32,7 @@ async function createConcurrence(
     return newConcurrence;
   } catch (error) {
     if (error instanceof Error) {
-      logger.error(error.message);
+      console.log(error.message);
     }
     throw new Error('Error occurred while creating new Concurrence');
   }

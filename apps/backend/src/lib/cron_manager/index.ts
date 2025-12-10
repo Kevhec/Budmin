@@ -1,23 +1,23 @@
 import cron from 'node-cron';
 import deleteUnverifiedUsers from '../jobs/deleteUnverifiedUsers';
 import loadCronTasks from './taskLoader';
-import logger from '../utils/logger';
+import { cliTheme } from '../utils';
 
 async function startCronManager() {
   try {
-    logger.server('Starting cron task manager');
-    logger.server('Loading stored tasks...');
+    console.log(`${cliTheme.server('[Server]')} Starting cron task manager`);
+    console.log(`${cliTheme.server('[Server]')} Loading stored tasks...`);
     await loadCronTasks();
-    logger.server('Cron tasks loaded');
+    console.log(`${cliTheme.server('[Server]')} Cron tasks loaded`);
 
-    logger.server('Initializing task for unverified users deletion');
+    console.log(`${cliTheme.server('[Server]')} Initializing task for deletion of unverified users`);
     cron.schedule('0 0 * * *', async () => {
-      await deleteUnverifiedUsers();
+      deleteUnverifiedUsers();
     });
-    logger.server('Unverified users deletion task initialized');
-    logger.server('Cron manager initialized correctly');
+    console.log(`${cliTheme.server('[Server]')} Unverified users deletion task initialized`);
+    console.log(`${cliTheme.server('[Server]')} Cron manager initialized correctly`);
   } catch (error) {
-    logger.error(`Cron tasks couldn't be loaded ${error}`);
+    console.log(`${cliTheme.serverWarn('[Server]')} Cron tasks couldn't be loaded`, error);
   }
 }
 

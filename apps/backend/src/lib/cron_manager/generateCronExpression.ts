@@ -1,5 +1,4 @@
 import { RecurrenceType, Ordinals, type ParsedConcurrence } from '../types';
-import logger from '../utils/logger';
 import getWeekDay from '../utils/time/getWeekDay';
 /*
 Cron expression anatomy
@@ -55,7 +54,7 @@ function generateCronExpression(concurrence: Params) {
   }
 
   if (weekDay?.ordinal) {
-    logger.info({ ordinal: weekDay.ordinal });
+    console.log({ ordinal: weekDay.ordinal });
     ordinalWeekdayNumber = getOrdinalIndex(weekDay.ordinal) || 1;
   }
 
@@ -87,7 +86,7 @@ function generateCronExpression(concurrence: Params) {
       throw new Error('Unsupported occurrence type');
   }
 
-  logger.info({ cronExpression });
+  console.log({ cronExpression });
 
   return cronExpression.trim();
 }

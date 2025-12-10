@@ -3,7 +3,6 @@ import { fn, literal, Op } from 'sequelize';
 import { Category, Transaction } from '../database/models';
 import generateDateRange from '../lib/utils/generateDateRange';
 import { cliTheme } from '../lib/utils';
-import logger from '../lib/utils/logger';
 
 // Create
 async function createCategory(
@@ -153,7 +152,7 @@ async function getCategoriesMonthlyBalance(
     });
   } catch (error) {
     if (error instanceof Error) {
-      logger.error(`${cliTheme.serverWarn('ERROR at getCategoriesMonthlyBalance')}: ${error.message}`);
+      console.log(`${cliTheme.serverWarn('ERROR at getCategoriesMonthlyBalance')}: ${error.message}`);
     }
     return res.status(500).json('Internal server error');
   }

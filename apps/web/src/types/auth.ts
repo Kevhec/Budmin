@@ -38,26 +38,16 @@ export enum AuthActionType {
   LOGOUT = 'LOGOUT',
   SET_ERROR = 'SET_ERROR',
   SET_LOADING = 'SET_LOADING',
-  SET_RETRY_TOKEN = 'SET_RETRY_TOKEN',
   VERIFY_ACCOUNT = 'VERIFY_ACCOUNT',
-  RESEND_VERIFICATION = 'RESEND_VERIFICATION',
   SET_MESSAGE = 'SET_MESSAGE',
   SET_FINISHED_ASYNC_ACTION = 'SET_FINISHED_ASYNC_ACTION',
-}
-
-export interface AuthError {
-  status: 'error' | 'success'
-  code: 'expired_token' | 'invalid_token' | 'internal_error' | 'success'
-  message: string
-  maskedEmail?: string
-  retryToken?: string
 }
 
 export type SignUpAction =
   ReducerAction<AuthActionType.SIGN_UP>;
 
 export type SetErrorAction =
-  ReducerAction<AuthActionType.SET_ERROR, AuthError | null>;
+  ReducerAction<AuthActionType.SET_ERROR, string>;
 
 export type SetMessageAction =
   ReducerAction<AuthActionType.SET_MESSAGE, string>;
@@ -72,24 +62,15 @@ export type LogoutAction =
   ReducerAction<AuthActionType.LOGOUT>;
 
 export type VerifyTokenAction =
-  ReducerAction<AuthActionType.VERIFY_ACCOUNT, string>;
-
-export type ResendVerification =
-  ReducerAction<AuthActionType.RESEND_VERIFICATION, string>;
-
-export type SetRetryToken =
-  ReducerAction<AuthActionType.SET_RETRY_TOKEN, string>;
+  ReducerAction<AuthActionType.VERIFY_ACCOUNT>;
 
 export type AuthAction =
   | LoginAction
   | LoginGuestAction
   | SignUpAction
-  | VerifyTokenAction
-  | ResendVerification
   | LogoutAction
   | SetErrorAction
   | SetMessageAction
-  | SetRetryToken
   | LoadingAction<AuthActionType.SET_LOADING>
   | FinishedAsyncAction<AuthActionType.SET_FINISHED_ASYNC_ACTION>;
 
@@ -98,8 +79,7 @@ export interface AuthState {
   loading: boolean
   finishedAsyncAction: boolean
   message: string
-  error: AuthError | null
-  retryToken?: string
+  error: string
 }
 
 export interface AuthContextType {
@@ -109,7 +89,6 @@ export interface AuthContextType {
   loginGuest: (credentials: AuthLoginGuest) => void
   login: (credentials: AuthLoginUser) => void
   verifyToken: (token: string) => void
-  resendVerification: (token: string) => void
 }
 
 export type AuthReducer = Reducer<AuthState, AuthAction>;

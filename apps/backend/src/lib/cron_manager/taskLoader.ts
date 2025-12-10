@@ -1,7 +1,6 @@
 import CronTask from '@database/models/cronTask';
 import CronJob from '@database/models/cronJobs';
 import { type Job, scheduleCronTask } from './taskScheduler';
-import logger from '../utils/logger';
 
 async function loadCronTasks() {
   try {
@@ -38,7 +37,7 @@ async function loadCronTasks() {
       });
     });
   } catch (error) {
-    logger.error(error);
+    console.log(error);
     throw new Error('Error loading cron tasks');
   }
 }

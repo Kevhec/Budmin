@@ -11,7 +11,6 @@ import {
   createBudget as createBudgetJob,
   createTransaction as createTransactionJob,
 } from '../jobs';
-import logger from '../utils/logger';
 
 export interface Job {
   jobName: JobTypes
@@ -51,7 +50,7 @@ async function scheduleCronTask(
     const task = await CronTask.findByPk(taskId, { transaction });
     if (!task) throw new Error(`Task with ID ${taskId} not found.`);
 
-    logger.info({ endDate });
+    console.log({ endDate });
     const cronTask = cron.schedule(
       cronExpression,
       async () => {
@@ -120,7 +119,7 @@ async function stopCronTask(
       activeTasks.delete(taskId);
     }
   } catch (error) {
-    logger.error(`No active task found with ID: ${taskId}`);
+    console.log(`No active task found with ID: ${taskId}`);
   }
 }
 

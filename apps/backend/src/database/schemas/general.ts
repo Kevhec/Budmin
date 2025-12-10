@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { CONCURRENCE_TYPE, DEFAULT_CONCURRENCES, WEEKDAYS } from '@/src/lib/constants';
+import { z } from 'zod';
 
 const positiveInteger = z.number().positive();
 
@@ -7,8 +7,8 @@ const getObjectByUUID = z.object({
   id: z.string().uuid(),
 });
 
-const validateJWT = z.object({
-  token: z.string(),
+const getTokenUUID = z.object({
+  token: z.string().uuid(),
 });
 
 const concurrenceSchema = z.object({
@@ -38,7 +38,7 @@ const concurrenceSchema = z.object({
 
 export {
   positiveInteger,
-  validateJWT,
+  getTokenUUID,
   getObjectByUUID,
   concurrenceSchema,
 };

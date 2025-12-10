@@ -138,7 +138,7 @@ async function getAllBudgets(
       whereClause.createdAt = {
         [Op.between]: [start, end],
       };
-      req.log.info(whereClause);
+      console.log(whereClause);
     }
   }
 
