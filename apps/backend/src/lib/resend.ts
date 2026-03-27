@@ -6,7 +6,7 @@ const sendEmail = async (
   from: string,
   to: string,
   subject: string,
-  html: string
+  html: string,
 ) => {
   try {
     const { data, error } = await resend.emails.send({

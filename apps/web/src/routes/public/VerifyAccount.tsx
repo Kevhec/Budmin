@@ -45,19 +45,12 @@ export default function VerifyAccount() {
                   )
                 }
               </div>
-              <div>
-                <Typography>Serás redirigido a la página de inicio en:</Typography>
-                <div className="mt-4 space-y-2">
-                  <Typography>
-                    Si no eres redirigido automáticamente
-                    puedes dar click en el siguiente botón
-                  </Typography>
-                  <Button asChild>
-                    <NavLink to="/" replace>
-                      Inicio
-                    </NavLink>
-                  </Button>
-                </div>
+              <div className="mt-4 space-y-2">
+                <Button asChild>
+                  <NavLink to="/" replace>
+                    Inicio
+                  </NavLink>
+                </Button>
               </div>
             </>
           ))

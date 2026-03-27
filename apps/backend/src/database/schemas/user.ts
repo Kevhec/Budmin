@@ -27,8 +27,13 @@ const guestSchema = z.object({
   username: z.string().min(3).max(30),
 });
 
+const emailSchema = z.object({
+  email: z.string().email(),
+});
+
 export {
   userSchema,
   guestSchema,
   loginSchema,
+  emailSchema,
 };

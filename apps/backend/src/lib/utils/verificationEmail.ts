@@ -4,7 +4,7 @@ import sendEmail from '../resend';
 
 const frontendUrl = process.env.FRONTEND_URL;
 
-const verificationEmail = async (to: string, token: string) => {
+const sendVerificationEmail = async (to: string, token: string) => {
   try {
     const url = `${frontendUrl}/verify/${token}`;
     const html = await render(VerifyAccountEmail({ url }), {
@@ -29,4 +29,4 @@ const verificationEmail = async (to: string, token: string) => {
   }
 };
 
-export default verificationEmail;
+export default sendVerificationEmail;

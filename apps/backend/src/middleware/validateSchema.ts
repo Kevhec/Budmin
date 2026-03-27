@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 function validateSchema(schema: z.Schema) {
   return (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.body, schema);
     const { success, error } = schema.safeParse({ ...req.body, ...req.params, ...req.query });
 
     if (!success && error) {
