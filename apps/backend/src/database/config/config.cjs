@@ -8,6 +8,7 @@ module.exports = {
     host: process.env.DB_HOST,
     dialect: process.env.DB_DRIVER,
     port: process.env.DB_PORT || 5433,
+    schema: process.env.DB_SCHEMA || 'budmin',
   },
   production: {
     username: process.env.DB_USERNAME,

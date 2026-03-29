@@ -1,3 +1,4 @@
+import getAuthStatus from '@/lib/auth/getAuthStatus';
 import {
   type AuthAction, AuthActionType, type AuthState,
 } from '@/types';
@@ -11,6 +12,7 @@ const initialAuthState: AuthState = {
     createdAt: '',
     updatedAt: '',
   },
+  status: 'unauthenticated',
   loading: true,
   finishedAsyncAction: false,
   message: '',
@@ -26,6 +28,7 @@ function authReducer(
       return ({
         ...state,
         user: action.payload,
+        status: getAuthStatus(action.payload),
         loading: false,
       });
     case AuthActionType.LOGIN_GUEST:

@@ -4,6 +4,8 @@ import {
   type CreationOptional,
   type InferAttributes,
   type InferCreationAttributes,
+  type HasOneCreateAssociationMixin,
+  type HasOneSetAssociationMixin,
 } from 'sequelize';
 import type { Models } from '@/src/lib/types';
 import SequelizeConnection from '../config/SequelizeConnection';
@@ -34,6 +36,10 @@ class User
   declare createdAt?: CreationOptional<Date>;
 
   declare updatedAt?: CreationOptional<Date>;
+
+  declare setPreferences: HasOneSetAssociationMixin<UserPreferences, 'userId'>;
+
+  declare createPreferences: HasOneCreateAssociationMixin<UserPreferences>;
 
   public static associate(models: Models) {
     this.hasMany(models.Page, { foreignKey: 'userId' });
@@ -83,9 +89,8 @@ User.init({
     defaultValue: 'user',
   },
   token: {
-    type: DataTypes.UUID,
+    type: DataTypes.STRING,
     allowNull: true,
-    defaultValue: DataTypes.UUIDV4,
   },
   confirmed: {
     type: DataTypes.BOOLEAN,

@@ -6,11 +6,11 @@ import {
   type InferAttributes,
   type InferCreationAttributes,
 } from 'sequelize';
+import { format } from '@formkit/tempo';
 import {
   TargetType,
   ConcurrenceType, DefaultConcurrences, type Models, MonthSelect, WeekDays, WithEndDate,
 } from '@/src/lib/types';
-import { format } from '@formkit/tempo';
 import { CONCURRENCE_TYPE } from '@/src/lib/constants';
 import SequelizeConnection from '../config/SequelizeConnection';
 import type User from './user';

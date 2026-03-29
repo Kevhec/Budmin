@@ -7,21 +7,18 @@ import {
 } from '../database/models';
 import generateJWT from '../lib/utils/generateJWT';
 import convert from '../lib/utils/convert';
-import { REMEMBER_ME_EXPIRATION_TIME_DAYS, SESSION_EXPIRATION_TIME_DAYS } from '../lib/constants';
-import sendVerificationEmail from '../lib/utils/verificationEmail';
 import sanitizeObject from '../lib/utils/sanitizeObject';
 import setCookie from '../lib/utils/setCookie';
 import SequelizeConnection from '../database/config/SequelizeConnection';
 import type {
   CreateUserRequestBody, TypedRequest,
 } from '../lib/types';
+import setSessionCookie from '../lib/utils/setSessionCookie';
+import initiateEmailVerification from '../lib/utils/initiateEmailVerification';
 
 const { JsonWebTokenError, verify } = jwt;
 
 const sequelize = SequelizeConnection.getInstance();
-const isProduction = process.env.NODE_ENV === 'production';
-const NUMERIC_TOKEN_EXPIRATION_TIME = 20;
-const TEXT_BASED_TOKEN_EXPIRATION_TIME = `${NUMERIC_TOKEN_EXPIRATION_TIME}s`;
 
 const signUp = async (
   req: TypedRequest<CreateUserRequestBody>,
@@ -40,7 +37,6 @@ const signUp = async (
     // Generate salt to properly hash the password
     const salt = await bcrypt.genSalt(10);
 
-    // Apply a hashing process to the password
     const data = {
       email,
       username,
@@ -49,29 +45,15 @@ const signUp = async (
       password: await bcrypt.hash(password, salt),
     };
 
-    // Create a new user,
     const newUser = await User.create(data);
-    const newPreferences = await UserPreferences.create();
 
-    // If user is successfully created, generate a jwt using env secret key
-    // and send it through a cookie to the client
     if (!newUser) {
       return res.status(409).json('Datos incorrectos');
     }
 
-    const confirmationToke = generateJWT(
-      { userId: newUser.get('id') },
-      { expiresIn: TEXT_BASED_TOKEN_EXPIRATION_TIME, issuer: 'budmin', audience: 'email-verification' },
-    );
-
-    await newUser.update({ token: confirmationToke });
-
-    // Testing email delivered@resend.dev
-    await sendVerificationEmail(isProduction ? newUser.email : 'delivered@resend.dev', confirmationToke || '');
+    await initiateEmailVerification(newUser);
 
     const plainUserObj = newUser.toJSON();
-    const plainPreferences = sanitizeObject(newPreferences.toJSON(), ['userId']);
-    plainUserObj.preferences = plainPreferences;
 
     // Sanitize user object in order to avoid sending sensitive data to frontend
     sanitizeObject(plainUserObj, ['password', 'token']);
@@ -104,11 +86,11 @@ const resendVerificationEmail = async (req: TypedRequest<{ email: string }>, res
       return res.status(404).json(`No user found with email ${email}`);
     }
 
-    if (!user.token) {
+    if (user.confirmed) {
       return res.status(409).json('User already verified');
     }
 
-    await sendVerificationEmail(isProduction ? user.email : 'delivered@resend.dev', user.token || '');
+    await initiateEmailVerification(user);
 
     return res.status(200).json('Verification email sent');
   } catch (e: unknown) {
@@ -123,19 +105,23 @@ const verifyToken = async (req: Request, res: Response) => {
   const { token } = req.params;
 
   try {
-    const decoded = await new Promise<JwtPayload | string>((resolve, reject) => {
-      verify(token, process.env.SECRET_KEY || '', (err, dec) => {
-        if (err) reject(err);
+    const decoded = await new Promise<JwtPayload>((resolve, reject) => {
+      verify(token, process.env.SECRET_KEY || '', {
+        issuer: 'budmin',
+        audience: 'account-verification',
+      }, (err, dec) => {
+        if (err || typeof dec === 'string') reject(err);
         else resolve(dec!);
       });
     });
 
-    const userId = typeof decoded !== 'string' ? decoded.userId : undefined;
+    const { userId } = decoded;
 
-    const user = await (userId
-      ? User.findByPk(userId)
-      : User.findOne({ where: { token } })
-    );
+    if (!userId) {
+      return res.status(401).json('Invalid or expired token');
+    }
+
+    const user = await User.findByPk(userId);
 
     if (!user) {
       return res.status(401).json('Invalid or expired token');
@@ -146,8 +132,12 @@ const verifyToken = async (req: Request, res: Response) => {
       confirmed: true,
     });
 
-    // TODO: Standardize responses with upper "responseObject" format
-    return res.status(200).json({ data: 'verified' });
+    // Set user session right after successful verification
+    setSessionCookie(res, user.id, true);
+
+    const sanitizedUser = sanitizeObject(user.toJSON(), ['password', 'token', 'updatedAt']);
+
+    return res.status(200).json({ data: sanitizedUser });
   } catch (error: unknown) {
     if (error instanceof JsonWebTokenError) {
       return res.status(401).json('Invalid or expired token');
@@ -163,16 +153,15 @@ const logIn = async (req: Request, res: Response) => {
   try {
     const { email, password, remember } = req.body;
 
-    // Set different token expiration time if user wants to be remembered
-    const expirationTime = remember
-      ? REMEMBER_ME_EXPIRATION_TIME_DAYS
-      : SESSION_EXPIRATION_TIME_DAYS;
-
     // Find user by their email
     const user = await User.findOne({
       where: {
         email,
       },
+      include: [{
+        model: UserPreferences,
+        as: 'preferences',
+      }],
     });
 
     // If user is found, compare provided password with bcrypt
@@ -183,25 +172,19 @@ const logIn = async (req: Request, res: Response) => {
     const isSame = await bcrypt.compare(password, user.password);
 
     // If it's a match, generate a jwt and send it through a session cookie
-    if (isSame) {
-      const token = generateJWT({ id: user?.id }, { expiresIn: convert(expirationTime, 'day', 'second') });
-
-      setCookie(res, 'jwt', token, {
-        maxAge:
-          process.env.NODE_ENV === 'development'
-            ? 99999999999999
-            : convert(expirationTime, 'day', 'ms'),
-      });
-
-      const plainUserObj = user.toJSON();
-
-      // Sanitize user object to send it to client for profiling purposes
-      const sanitizedUser = sanitizeObject(plainUserObj, ['password', 'token', 'updatedAt']);
-
-      // send user data
-      return res.status(201).json({ data: sanitizedUser });
+    if (!isSame) {
+      return res.status(401).json('Authentication failed');
     }
-    return res.status(401).json('Authentication failed');
+
+    setSessionCookie(res, user.id, remember);
+
+    const plainUserObj = user.toJSON();
+
+    // Sanitize user object to send it to client for profiling purposes
+    const sanitizedUser = sanitizeObject(plainUserObj, ['password', 'token', 'updatedAt']);
+
+    // send user data
+    return res.status(201).json({ data: sanitizedUser });
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(error.message);

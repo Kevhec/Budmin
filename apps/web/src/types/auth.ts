@@ -74,12 +74,15 @@ export type AuthAction =
   | LoadingAction<AuthActionType.SET_LOADING>
   | FinishedAsyncAction<AuthActionType.SET_FINISHED_ASYNC_ACTION>;
 
+export type AuthStatus = 'unauthenticated' | 'unverified' | 'uninitialized' | 'authenticated';
+
 export interface AuthState {
   user: User
   loading: boolean
   finishedAsyncAction: boolean
   message: string
   error: string
+  status: AuthStatus
 }
 
 export interface AuthContextType {
