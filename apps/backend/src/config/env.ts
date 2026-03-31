@@ -4,7 +4,7 @@ const timeString = z.string().regex(/^\d+(s|m|h)$/);
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']),
-  PORT: z.number().int(),
+  PORT: z.coerce.number().int(),
   FRONTEND_URL: z.string(),
   EMAIL_VERIFICATION_TOKEN_EXPIRATION: timeString,
   DB_SCHEMA: z.enum(['budmin']),

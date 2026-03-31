@@ -7,7 +7,7 @@ import SignUp from './pages/public/SignUp';
 import SuccessSignUp from './pages/public/SuccessSignUp';
 import Guest from './pages/public/Guest';
 import ResendVerification from './pages/auth/ResendVerification';
-import VerifyAccount from './pages/public/VerifyAccount';
+import VerifyAccount from './pages/auth/VerifyAccount';
 import PrivateRoute from './guards/PrivateRoute';
 import Dashboard from './pages/private/Dashboard';
 import Budgets from './pages/private/Budgets';
@@ -27,9 +27,9 @@ export default function AppRouter() {
           </Route>
         </Route>
         <Route element={<UnverifiedRoute />}>
-          <Route path="verify/:token" element={<VerifyAccount />} />
           <Route path="verify/resend" element={<ResendVerification />} />
         </Route>
+        <Route path="verify/:token" element={<VerifyAccount />} />
         <Route path="app" element={<AppLayout />}>
           <Route element={<PrivateRoute />}>
             <Route path="dashboard" element={<Dashboard />} />

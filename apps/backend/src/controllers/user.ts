@@ -92,7 +92,7 @@ const resendVerificationEmail = async (req: TypedRequest<{ email: string }>, res
 
     await initiateEmailVerification(user);
 
-    return res.status(200).json('Verification email sent');
+    return res.status(200).json({ data: { message: 'Verification email sent' } });
   } catch (e: unknown) {
     if (e instanceof Error) {
       console.error(e.message);

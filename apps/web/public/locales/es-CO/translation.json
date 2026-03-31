@@ -453,5 +453,11 @@
     "dialog": {
       "graphHeading": "Evolución del presupuesto"
     }
+  },
+  "auth": {
+    "unconfirmed": {
+      "message": "Tu cuenta no está verificada. Es posible que el enlace de verificación haya expirado o ya no sea válido. Haz clic en el botón para recibir un nuevo correo de verificación.",
+      "button": "Reenviar correo de verificación"
+    }
   }
 }

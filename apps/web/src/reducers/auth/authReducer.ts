@@ -2,8 +2,10 @@ import getAuthStatus from '@/lib/auth/getAuthStatus';
 import {
   type AuthAction, AuthActionType, type AuthState,
 } from '@/types';
+import createBaseReducer, { defaultBaseState } from '../base/baseReducer';
 
 const initialAuthState: AuthState = {
+  ...defaultBaseState,
   user: {
     id: null,
     username: null,
@@ -13,13 +15,9 @@ const initialAuthState: AuthState = {
     updatedAt: '',
   },
   status: 'unauthenticated',
-  loading: true,
-  finishedAsyncAction: false,
-  message: '',
-  error: '',
 };
 
-function authReducer(
+function authDomainReducer(
   state: AuthState,
   action: AuthAction,
 ): AuthState {
@@ -39,30 +37,12 @@ function authReducer(
       });
     case AuthActionType.LOGOUT:
       return (initialAuthState);
-    case AuthActionType.SET_FINISHED_ASYNC_ACTION:
-      return ({
-        ...state,
-        finishedAsyncAction: action.payload,
-      });
-    case AuthActionType.SET_ERROR:
-      return ({
-        ...state,
-        error: action.payload,
-      });
-    case AuthActionType.SET_MESSAGE:
-      return ({
-        ...state,
-        message: action.payload,
-      });
-    case AuthActionType.SET_LOADING:
-      return ({
-        ...state,
-        loading: action.payload,
-      });
     default:
       return state;
   }
 }
+
+const authReducer = createBaseReducer<AuthState, AuthAction>(authDomainReducer);
 
 export {
   initialAuthState,

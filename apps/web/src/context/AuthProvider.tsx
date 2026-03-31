@@ -15,6 +15,7 @@ import {
   loginGuest as loginGuestAction,
   verifyToken as verifyTokenAction,
   signUp as signUpAction,
+  resendVerificationEmail as resendVerificationEmailAction,
 } from '@/reducers/auth/authActions';
 
 interface Props {
@@ -46,6 +47,10 @@ export function AuthProvider({ children }: Props) {
     verifyTokenAction(dispatch, token);
   }, []);
 
+  const resendVerificationEmail = useCallback((email: string) => {
+    resendVerificationEmailAction(dispatch, email);
+  }, []);
+
   const signUp = useCallback((credentials: AuthSignUpUser) => {
     signUpAction(dispatch, credentials);
   }, []);
@@ -57,7 +62,8 @@ export function AuthProvider({ children }: Props) {
     signUp,
     logout,
     verifyToken,
-  }), [state, verifyToken, signUp]);
+    resendVerificationEmail,
+  }), [state, verifyToken, signUp, resendVerificationEmail]);
 
   if (state.loading && !state.user.id) {
     return <p>LOADING</p>;
