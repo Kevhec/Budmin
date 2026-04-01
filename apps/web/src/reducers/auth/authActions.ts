@@ -216,13 +216,18 @@ async function verifyToken(dispatch: Dispatch<AuthAction>, token: string) {
   });
 
   try {
-    const { data } = await axiosClient.post<MessageResponse>(`/user/verify/${token || ''}`);
+    const { data } = await axiosClient.post<AuthResponse>(`/user/verify/${token || ''}`);
+
+    dispatch({
+      type: AuthActionType.LOGIN,
+      payload: data.data,
+    });
 
     dispatch({
       type: BaseActionType.SET_MESSAGE,
       payload: {
         verificationVerifyTokenSuccess: {
-          text: data.data.message,
+          text: 'User verified successfully',
           type: 'success',
         },
       },
@@ -264,7 +269,6 @@ async function resendVerificationEmail(dispatch: Dispatch<AuthAction>, email: st
         },
       },
     });
-    console.log(data);
   } catch (error: any) {
     dispatch({
       type: BaseActionType.SET_MESSAGE,

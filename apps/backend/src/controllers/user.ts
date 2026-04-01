@@ -104,6 +104,19 @@ const resendVerificationEmail = async (req: TypedRequest<{ email: string }>, res
 const verifyToken = async (req: Request, res: Response) => {
   const { token } = req.params;
 
+  const existingToken = req.cookies.jwt;
+
+  let alreadyAuthenticated = false;
+
+  if (existingToken) {
+    try {
+      verify(existingToken, process.env.SECRET_KEY || '');
+      alreadyAuthenticated = true;
+    } catch {
+      alreadyAuthenticated = false;
+    }
+  }
+
   try {
     const decoded = await new Promise<JwtPayload>((resolve, reject) => {
       verify(token, process.env.SECRET_KEY || '', {
@@ -133,7 +146,10 @@ const verifyToken = async (req: Request, res: Response) => {
     });
 
     // Set user session right after successful verification
-    setSessionCookie(res, user.id, true);
+    // but only if the user is not authenticated yet
+    if (!alreadyAuthenticated) {
+      setSessionCookie(res, user.id, true);
+    }
 
     const sanitizedUser = sanitizeObject(user.toJSON(), ['password', 'token', 'updatedAt']);
 

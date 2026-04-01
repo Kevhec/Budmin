@@ -1,5 +1,5 @@
 import useAuth from '@/hooks/useAuth';
-import { Button, Typography } from '@budmin/ui';
+import { Button, Spinner, Typography } from '@budmin/ui';
 import { useTranslation } from 'react-i18next';
 
 export default function ResendVerification() {
@@ -12,10 +12,31 @@ export default function ResendVerification() {
     resendVerificationEmail(state.user.email);
   };
 
+  const { verificationResendEmailSuccess, verificationResendEmailError } = state.messages;
+
   return (
     <div className="min-h-screen grid place-content-center">
-      <Typography className="max-w-80 mb-2 text-sm">{t('auth.unconfirmed.message')}</Typography>
-      <Button onClick={handleResendEmail}>{t('auth.unconfirmed.button')}</Button>
+      {state.loading && <Spinner className="size-8" />}
+      <Typography className="max-w-80 mb-2 text-sm">
+        {!verificationResendEmailSuccess
+          ? t('auth.unconfirmed.message')
+          : verificationResendEmailSuccess.text}
+      </Typography>
+
+      {verificationResendEmailError && (
+        <Typography className="max-w-80 mb-2 text-sm">
+          {verificationResendEmailError.text}
+        </Typography>
+      )}
+
+      {
+        !verificationResendEmailSuccess && (
+          <Button onClick={handleResendEmail}>
+            {t('auth.unconfirmed.button')}
+          </Button>
+        )
+      }
+
     </div>
   );
 }

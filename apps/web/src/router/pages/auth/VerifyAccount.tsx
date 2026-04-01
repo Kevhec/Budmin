@@ -1,60 +1,49 @@
 import useAuth from '@/hooks/useAuth';
 import { useEffect } from 'react';
 import { NavLink, useParams } from 'react-router';
-import { Button } from '@budmin/ui';
-import {
-  Typography,
-} from '@budmin/ui/internal/Typography';
+import { Button, Spinner } from '@budmin/ui';
+import { Typography } from '@budmin/ui/internal/Typography';
 
 export default function VerifyAccount() {
   const { token } = useParams();
   const {
-    state: {
-      finishedAsyncAction, loading, error, message,
-    },
+    state: { loading, messages },
     verifyToken,
   } = useAuth();
 
-  useEffect(() => {
-    if (!loading && !finishedAsyncAction) {
-      verifyToken(token || '');
-    }
-  }, [token, loading, finishedAsyncAction, verifyToken]);
+  const { verificationVerifyTokenSuccess, verificationVerifyTokenError } = messages;
 
   useEffect(() => {
-    console.log(error);
-  }, [error]);
+    if (!token) return;
+
+    verifyToken(token);
+  }, [token, verifyToken]);
 
   return (
-    <main className="text-center">
-      {
-        loading ? (
-          <p>loading...</p>
-        ) : (
-          finishedAsyncAction && (
-            <>
-              <div className="mb-2">
-                {
-                  error ? (
-                    <>
-                      <Typography className="capitalize text-danger font-semibold text-xl">Error</Typography>
-                      <Typography className="capitalize text-danger font-semibold text-xl">{error}</Typography>
-                    </>
-                  ) : (
-                    <Typography className="text-safe">{message}</Typography>
-                  )
-                }
-              </div>
-              <div className="mt-4 space-y-2">
-                <Button asChild>
-                  <NavLink to="/" replace>
-                    Inicio
-                  </NavLink>
-                </Button>
-              </div>
-            </>
-          ))
-      }
+    <main className="min-h-dvh flex flex-col gap-4 items-center justify-center">
+      {loading && <Spinner className="size-8" />}
+      {verificationVerifyTokenSuccess && (
+        <Typography className="text-green-700">
+          {verificationVerifyTokenSuccess.text}
+        </Typography>
+      )}
+
+      {verificationVerifyTokenError && (
+        <Typography className="text-red-700">
+          {verificationVerifyTokenError.text}
+        </Typography>
+      )}
+
+      {!loading && (
+        <Button asChild>
+          <NavLink
+            to={verificationVerifyTokenSuccess ? '/app/dashboard' : '/'}
+            replace
+          >
+            {verificationVerifyTokenSuccess ? 'Dashboard' : 'Inicio'}
+          </NavLink>
+        </Button>
+      )}
     </main>
   );
 }
