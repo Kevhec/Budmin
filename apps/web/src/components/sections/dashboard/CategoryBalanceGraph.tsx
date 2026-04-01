@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@budmin/ui/internal/Typography';
 import { type ChartConfig } from '@budmin/ui';
-import { useDashboard } from '@/context/DashboardProvider';
+import useDashboard from '@/hooks/useDashboard';
 
 const tabsDefaultValue = 'income';
 

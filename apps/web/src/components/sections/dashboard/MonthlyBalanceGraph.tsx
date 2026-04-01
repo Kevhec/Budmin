@@ -35,7 +35,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@budmin/ui/shadcn/chart';
-import { useDashboard } from '@/context/DashboardProvider';
+import useDashboard from '@/hooks/useDashboard';
 
 export const description = 'A linear line chart';
 

@@ -8,9 +8,9 @@ import {
 import { Typography } from '@budmin/ui/internal/Typography';
 import { Label } from '@budmin/ui/shadcn/label';
 import { useTranslation } from 'react-i18next';
-import { useDashboard } from '@/context/DashboardProvider';
 import useAuth from '@/hooks/useAuth';
 import { generateYearsList } from '@/lib/utils';
+import useDashboard from '@/hooks/useDashboard';
 
 export default function DateSelector() {
   const { state: { user } } = useAuth();

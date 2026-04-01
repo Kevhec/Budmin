@@ -9,9 +9,9 @@ import { useTranslation } from 'react-i18next';
 import {
   Tabs, TabsContent, TabsList, TabsTrigger,
 } from '@budmin/ui';
-import { useDashboard } from '@/context/DashboardProvider';
 import { formatYearMonthDate } from '@/lib/utils';
 import debounce from 'just-debounce-it';
+import useDashboard from '@/hooks/useDashboard';
 
 export default function GeneralResume() {
   const [balance, setBalance] = useState<MonthData>();
