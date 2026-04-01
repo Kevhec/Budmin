@@ -3,12 +3,15 @@ import {
   verifyToken,
   getInfo,
   logIn, loginAsGuest, logOut, signUp,
+  resendVerificationEmail,
 } from '../controllers/user';
 import saveUser from '../middleware/userAuth';
 import authenticate from '../middleware/authenticate';
 import validateSchema from '../middleware/validateSchema';
 import { getTokenUUID } from '../database/schemas/general';
-import { guestSchema, loginSchema, userSchema } from '../database/schemas/user';
+import {
+  emailSchema, guestSchema, loginSchema, userSchema,
+} from '../database/schemas/user';
 
 const router: Router = Router();
 
@@ -18,6 +21,7 @@ router.post('/signup', validateSchema(userSchema), saveUser, signUp);
 router.post('/guest', validateSchema(guestSchema), loginAsGuest);
 router.post('/logout', authenticate, logOut);
 router.post('/login', validateSchema(loginSchema), logIn);
+router.post('/verify/resend', validateSchema(emailSchema), resendVerificationEmail);
 router.post('/verify/:token', validateSchema(getTokenUUID), verifyToken);
 
 export default router;

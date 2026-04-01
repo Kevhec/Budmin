@@ -10,6 +10,7 @@
     "createMigration": "node ./src/lib/scripts/generateMigration.js",
     "seedAll:dev": "dotenvx run -f .env.development -- pnpm dlx sequelize-cli db:seed:all",
     "seedAll:prod": "dotenvx run -f .env.production -- pnpm dlx sequelize-cli db:seed:all",
+    "seedCategories:dev": "dotenvx run -f .env.development -- pnpm dlx sequelize-cli db:seed --seed 20240925175926-create-default-categories.cjs",
     "dev": "dotenvx run -f .env.development -- tsx watch ./src/index.ts",
     "start": "dotenvx run -f .env.production -- node dist/index.js"
   },

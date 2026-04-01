@@ -6,6 +6,7 @@ export * from './components/budmin/timePicker/time-picker-input.js';
 export * from './components/budmin/timePicker/time-picker-utils.js';
 export * from './components/ui/alert-dialog.js';
 export * from './components/ui/avatar.js';
+export * from './components/ui/spinner.js';
 export * from './components/ui/badge.js';
 export * from './components/ui/button.js';
 export * from './components/ui/calendar.js';

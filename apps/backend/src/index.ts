@@ -13,17 +13,17 @@ import {
 import SequelizeConnection from './database/config/SequelizeConnection.js';
 import startCronManager from './lib/cron_manager/index.js';
 import cliTheme from './lib/utils/chalk.js';
+import { appPort, dbSchema, frontendUrl } from './config/env.js';
 
 const sequelize = SequelizeConnection.getInstance();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // CORS Options
-const allowedDomains = [process.env.FRONTEND_URL];
+const allowedDomains = [frontendUrl];
 const corsOptions: CorsOptions = {
   origin(origin, callback) {
-    if (allowedDomains.indexOf(origin) !== -1 || !origin) {
+    if (!origin || allowedDomains.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -39,6 +39,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(responseInterceptor);
 
+// Setup routes
 app.use('/api/user', userRoutes);
 app.use('/api/budget', budgetRoutes);
 app.use('/api/transaction', transactionRoutes);
@@ -47,7 +48,7 @@ app.use('/api/category', categoryRouter);
 
 function init() {
   sequelize
-    .createSchema(process.env.DB_SCHEMA || 'public', { logging: console.log })
+    .createSchema(dbSchema || 'public', { logging: console.log })
     .catch(() => {
       console.log('Schema already exists');
     });
@@ -84,9 +85,9 @@ startCronManager().catch((err) => {
   console.log(`error starting cron manager: ${err}`);
 });
 
-app.listen(PORT, () => {
+app.listen(appPort, () => {
   console.log(
-    `\n${cliTheme.server('[Server]')}: listening to port ${PORT}
+    `\n${cliTheme.server('[Server]')}: listening to port ${appPort}
           at ${cliTheme.underline('http://localhost:3000/')}\n`,
   );
 });

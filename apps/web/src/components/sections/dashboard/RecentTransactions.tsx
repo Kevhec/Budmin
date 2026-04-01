@@ -8,7 +8,7 @@ import { Separator } from '@budmin/ui/shadcn/separator';
 import {
   Typography,
 } from '@budmin/ui/internal/Typography';
-import { useDashboard } from '@/context/DashboardProvider';
+import useDashboard from '@/hooks/useDashboard';
 
 export default function RecentTransactions() {
   const { state: { recentTransactions }, getRecentTransactions } = useTransactions();

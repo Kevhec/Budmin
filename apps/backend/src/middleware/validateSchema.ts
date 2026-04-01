@@ -6,7 +6,6 @@ function validateSchema(schema: z.Schema) {
     const { success, error } = schema.safeParse({ ...req.body, ...req.params, ...req.query });
 
     if (!success && error) {
-      console.log({ error });
       const errorMessages = error.errors.map((err) => `${err.path[0]}: ${err.message}`);
       return res.status(400).json(errorMessages);
     }

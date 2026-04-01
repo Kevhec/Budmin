@@ -1,5 +1,5 @@
-import { CONCURRENCE_TYPE, DEFAULT_CONCURRENCES, WEEKDAYS } from '@/src/lib/constants';
 import { z } from 'zod';
+import { CONCURRENCE_TYPE, DEFAULT_CONCURRENCES, WEEKDAYS } from '@/src/lib/constants';
 
 const positiveInteger = z.number().positive();
 
@@ -8,7 +8,7 @@ const getObjectByUUID = z.object({
 });
 
 const getTokenUUID = z.object({
-  token: z.string().uuid(),
+  token: z.string(),
 });
 
 const concurrenceSchema = z.object({

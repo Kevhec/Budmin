@@ -1,7 +1,7 @@
 import { getItem, setItem } from '@/lib/localStorage';
 import { formatYearMonthDate } from '@/lib/utils';
 import {
-  createContext, useCallback, useContext, useEffect, useMemo, useState, type PropsWithChildren,
+  createContext, useCallback, useEffect, useMemo, useState, type PropsWithChildren,
 } from 'react';
 
 interface DashboardContextType {
@@ -19,15 +19,6 @@ const DashboardContext = createContext<DashboardContextType>({
   changeMonth: () => null,
   changeYear: () => null,
 });
-
-function useDashboard() {
-  const ctx = useContext(DashboardContext);
-  if (!ctx) {
-    throw new Error('useDashboard should be used within a DashboardProvider');
-  }
-
-  return ctx;
-}
 
 function DashboardProvider({ children }: PropsWithChildren) {
   const [month, setMonth] = useState(new Date().getMonth());
@@ -75,4 +66,4 @@ function DashboardProvider({ children }: PropsWithChildren) {
   );
 }
 
-export { DashboardProvider, useDashboard };
+export { DashboardProvider, DashboardContext };

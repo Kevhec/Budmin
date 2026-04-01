@@ -1,6 +1,8 @@
 import { type Reducer } from 'react';
 import { type ApiResponse } from './api';
-import type { FinishedAsyncAction, LoadingAction, ReducerAction } from './common';
+import type {
+  MessageId, BaseAction, BaseState, ReducerAction,
+} from './common';
 
 export interface User {
   id: string | null
@@ -31,6 +33,24 @@ export interface AuthSignUpUser {
 
 export type AuthResponse = ApiResponse<User>;
 
+export type AuthStatus = 'unauthenticated' | 'unverified' | 'uninitialized' | 'authenticated';
+
+type AuthDomain =
+  | 'signup'
+  | 'session'
+  | 'verification';
+
+type AuthActionForMessage =
+  | 'request'
+  | 'validate'
+  | 'refresh'
+  | 'logout'
+  | 'login'
+  | 'verifyToken'
+  | 'resendEmail';
+
+type AuthMessageIds = MessageId<AuthDomain, AuthActionForMessage>;
+
 export enum AuthActionType {
   LOGIN = 'LOGIN',
   LOGIN_GUEST = 'LOGIN_GUEST',
@@ -41,16 +61,11 @@ export enum AuthActionType {
   VERIFY_ACCOUNT = 'VERIFY_ACCOUNT',
   SET_MESSAGE = 'SET_MESSAGE',
   SET_FINISHED_ASYNC_ACTION = 'SET_FINISHED_ASYNC_ACTION',
+  DELETE_MESSAGE = 'DELETE_MESSAGE',
 }
 
 export type SignUpAction =
   ReducerAction<AuthActionType.SIGN_UP>;
-
-export type SetErrorAction =
-  ReducerAction<AuthActionType.SET_ERROR, string>;
-
-export type SetMessageAction =
-  ReducerAction<AuthActionType.SET_MESSAGE, string>;
 
 export type LoginAction =
   ReducerAction<AuthActionType.LOGIN, User>;
@@ -69,17 +84,11 @@ export type AuthAction =
   | LoginGuestAction
   | SignUpAction
   | LogoutAction
-  | SetErrorAction
-  | SetMessageAction
-  | LoadingAction<AuthActionType.SET_LOADING>
-  | FinishedAsyncAction<AuthActionType.SET_FINISHED_ASYNC_ACTION>;
+  | BaseAction<AuthMessageIds>;
 
-export interface AuthState {
+export interface AuthState extends BaseState<AuthMessageIds> {
   user: User
-  loading: boolean
-  finishedAsyncAction: boolean
-  message: string
-  error: string
+  status: AuthStatus
 }
 
 export interface AuthContextType {
@@ -89,6 +98,7 @@ export interface AuthContextType {
   loginGuest: (credentials: AuthLoginGuest) => void
   login: (credentials: AuthLoginUser) => void
   verifyToken: (token: string) => void
+  resendVerificationEmail: (email: string) => void
 }
 
 export type AuthReducer = Reducer<AuthState, AuthAction>;

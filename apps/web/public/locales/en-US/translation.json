@@ -455,5 +455,11 @@
     "dialog": {
       "graphHeading": "Budget Evolution"
     }
+  },
+  "auth": {
+    "unconfirmed": {
+      "message": "Your account is not verified. The verification link may have expired or is no longer valid. Click the button below to receive a new verification email.",
+      "button": "Resend verification email"
+    }
   }
 }

@@ -333,7 +333,7 @@ module.exports = {
     const t = await queryInterface.sequelize.transaction();
 
     try {
-      await queryInterface.bulkInsert('categories', categories, { t });
+      await queryInterface.bulkInsert({ tableName: 'categories', schema: 'budmin' }, categories, { t });
       await t.commit();
     } catch (error) {
       console.error(error.message);
@@ -344,10 +344,11 @@ module.exports = {
   async down(queryInterface) {
     const transaction = await queryInterface.sequelize.transaction();
     try {
-      await queryInterface.bulkDelete('categories', null, { transaction });
+      await queryInterface.bulkDelete({ tableName: 'categories', schema: 'budmin' }, null, { transaction });
       await transaction.commit();
     } catch (error) {
       await transaction.rollback();
+      console.error(error.message);
       throw error;
     }
   },
