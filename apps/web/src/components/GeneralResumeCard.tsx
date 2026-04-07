@@ -1,15 +1,11 @@
 import { cn, getMonthFromDate } from '@/lib/utils';
 import { formatMoney } from '@/lib/formatNumber';
 import { useTranslation } from 'react-i18next';
+import { Textfit } from 'react-textfit';
 import {
   Card, CardContent, CardHeader, CardTitle,
-} from '@budmin/ui';
-import {
-  Typography,
-} from '@budmin/ui/internal/Typography';
-import {
-  Textfit,
-} from 'react-textfit';
+} from './ui/card';
+import { Typography } from './Typography';
 
 interface Props {
   variant?: 'default' | 'income' | 'expense'
@@ -20,15 +16,23 @@ interface Props {
 }
 
 export default function GeneralResumeCard({
-  variant, title, value, month, className,
+  variant,
+  title,
+  value,
+  month,
+  className,
 }: Props) {
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
 
-  const resumeCardClasses = cn('gap-0 rounded-md p-4 col-span-4 border-none', {
-    'bg-secondaryGreen text-white': variant === 'income',
-    'bg-secondaryYellow': variant === 'expense',
-  }, className);
+  const resumeCardClasses = cn(
+    'gap-0 rounded-md p-4 col-span-4 border-none',
+    {
+      'bg-secondaryGreen text-white': variant === 'income',
+      'bg-secondaryYellow': variant === 'expense',
+    },
+    className,
+  );
 
   const formattedMoney = formatMoney(value, {
     locale: currentLanguage,

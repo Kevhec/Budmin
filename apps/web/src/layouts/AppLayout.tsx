@@ -5,18 +5,14 @@ import { useMediaQuery } from 'react-responsive';
 import { useRef } from 'react';
 import Navigation from '@/components/sections/Navigation';
 import Header from '@/components/sections/Header';
-import {
-  ScrollArea,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@budmin/ui';
 import CreationDialog from '@/components/creationMenu/CreationDialog';
 import TransactionsProvider from '@/context/TransactionProvider';
 import CategoriesProvider from '@/context/CategoriesProvider';
 import BudgetProvider from '@/context/BudgetProvider';
 import Footer from '@/components/sections/Footer';
 import { cn } from '@/lib/utils';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { ScrollArea } from '@/components/ui/scroll-area';
 /* import { SidebarProvider } from '@/components/ui/sidebar'; */
 
 export default function AppLayout() {

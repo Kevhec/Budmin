@@ -1,6 +1,6 @@
-import { TooltipProvider } from '@budmin/ui';
-import { AuthProvider } from './context/AuthProvider';
-import AppRouter from './router';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { AuthProvider } from '@/context/AuthProvider';
+import AppRouter from '@/router';
 
 function App() {
   return (

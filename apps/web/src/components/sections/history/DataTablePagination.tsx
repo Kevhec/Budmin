@@ -1,21 +1,19 @@
-import { type Table } from '@tanstack/react-table';
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-} from 'lucide-react';
-import { useTranslation } from 'react-i18next';
+import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@budmin/ui';
+} from "@/components/ui/select"
+import { type Table } from "@tanstack/react-table"
 import {
-  Button,
-} from '@budmin/ui/shadcn/button';
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>
@@ -24,7 +22,7 @@ interface DataTablePaginationProps<TData> {
 export default function DataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <div className="flex items-center justify-end px-2">
@@ -43,11 +41,13 @@ export default function DataTablePagination<TData>({
       </div> */}
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium">{t('history.datatable.controls.pagination.perPage')}</p>
+          <p className="text-sm font-medium">
+            {t("history.datatable.controls.pagination.perPage")}
+          </p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
-              table.setPageSize(Number(value));
+              table.setPageSize(Number(value))
             }}
           >
             <SelectTrigger className="h-8 w-[70px]">
@@ -63,13 +63,8 @@ export default function DataTablePagination<TData>({
           </Select>
         </div>
         <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-          {t('common.page')}
-          {' '}
-          {table.getState().pagination.pageIndex + 1}
-          {' '}
-          {t('helpers.of')}
-          {' '}
-          {table.getPageCount()}
+          {t("common.page")} {table.getState().pagination.pageIndex + 1}{" "}
+          {t("helpers.of")} {table.getPageCount()}
         </div>
         <div className="flex items-center space-x-2">
           <Button
@@ -78,7 +73,9 @@ export default function DataTablePagination<TData>({
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
           >
-            <span className="sr-only">{t('history.datatable.controls.pagination.firstPage')}</span>
+            <span className="sr-only">
+              {t("history.datatable.controls.pagination.firstPage")}
+            </span>
             <ChevronsLeft />
           </Button>
           <Button
@@ -87,7 +84,9 @@ export default function DataTablePagination<TData>({
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            <span className="sr-only">{t('history.datatable.controls.pagination.prevPage')}</span>
+            <span className="sr-only">
+              {t("history.datatable.controls.pagination.prevPage")}
+            </span>
             <ChevronLeft />
           </Button>
           <Button
@@ -96,7 +95,9 @@ export default function DataTablePagination<TData>({
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            <span className="sr-only">{t('history.datatable.controls.pagination.nextPage')}</span>
+            <span className="sr-only">
+              {t("history.datatable.controls.pagination.nextPage")}
+            </span>
             <ChevronRight />
           </Button>
           <Button
@@ -105,11 +106,13 @@ export default function DataTablePagination<TData>({
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >
-            <span className="sr-only">{t('history.datatable.controls.pagination.lastPage')}</span>
+            <span className="sr-only">
+              {t("history.datatable.controls.pagination.lastPage")}
+            </span>
             <ChevronsRight />
           </Button>
         </div>
       </div>
     </div>
-  );
+  )
 }

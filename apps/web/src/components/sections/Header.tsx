@@ -6,6 +6,16 @@ import { useLocation, useNavigate } from 'react-router';
 import useAuth from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
+import Navigation from './Navigation';
+import Footer from './Footer';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from '../ui/sheet';
+import { Button } from '../ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,18 +24,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@budmin/ui/shadcn/dropdown-menu';
-import {
-  Button,
-} from '@budmin/ui/shadcn/button';
-import {
-  Avatar, AvatarFallback/* , AvatarImage */,
-} from '@budmin/ui/shadcn/avatar';
-import {
-  Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger,
-} from '@budmin/ui/shadcn/sheet';
-import Navigation from './Navigation';
-import Footer from './Footer';
+} from '../ui/dropdown-menu';
+import { Avatar, AvatarFallback } from '../ui/avatar';
 /* import { SidebarTrigger } from './ui/sidebar'; */
 
 function Header({ ...props }) {
@@ -73,7 +73,10 @@ function Header({ ...props }) {
   });
 
   return (
-    <header className="px-4 py-4 gap-x-2 bg-white flex justify-between items-center" {...props}>
+    <header
+      className="px-4 py-4 gap-x-2 bg-white flex justify-between items-center"
+      {...props}
+    >
       <Sheet open={open} onOpenChange={setOpen}>
         {/* <SidebarTrigger /> */}
         <SheetTrigger asChild>
@@ -82,10 +85,17 @@ function Header({ ...props }) {
             <span className="sr-only">{t('app.sidebarSheet.trigger')}</span>
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="sm:max-w-xs flex flex-col justify-between font-openSans bg-[#343A40] text-white border-none">
+        <SheetContent
+          side="left"
+          className="sm:max-w-xs flex flex-col justify-between font-openSans bg-[#343A40] text-white border-none"
+        >
           <div>
-            <SheetTitle className="sr-only">{t('app.sidebarSheet.title')}</SheetTitle>
-            <SheetDescription className="sr-only">{t('app.sidebarSheet.description')}</SheetDescription>
+            <SheetTitle className="sr-only">
+              {t('app.sidebarSheet.title')}
+            </SheetTitle>
+            <SheetDescription className="sr-only">
+              {t('app.sidebarSheet.description')}
+            </SheetDescription>
             <p className="text-3xl font-semibold mb-32 font-openSans">Budmin</p>
             <Navigation />
           </div>
@@ -93,26 +103,20 @@ function Header({ ...props }) {
         </SheetContent>
       </Sheet>
       <p className="flex-1">
-        { t('app.header.greeting') }
+        {t('app.header.greeting')}
         {' '}
-        <span className="font-bold">
-          {state.user?.username || ''}
-        </span>
+        <span className="font-bold">{state.user?.username || ''}</span>
       </p>
       <DropdownMenu onOpenChange={handleDropdown}>
         <DropdownMenuTrigger className="flex gap-x-1 items-center">
           <Avatar>
             {/* <AvatarImage /> */}
-            <AvatarFallback>
-              {avatarFallback}
-            </AvatarFallback>
+            <AvatarFallback>{avatarFallback}</AvatarFallback>
           </Avatar>
           <ChevronDown className={userDropdownArrowClasses} />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>
-            {t('app.userMenu.label')}
-          </DropdownMenuLabel>
+          <DropdownMenuLabel>{t('app.userMenu.label')}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>

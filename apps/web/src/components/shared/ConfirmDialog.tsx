@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,8 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogPortal,
   AlertDialogTitle,
-} from '@budmin/ui/shadcn/alert-dialog';
-import { useTranslation } from 'react-i18next';
+} from '../ui/alert-dialog';
 
 interface Props {
   open: boolean
@@ -21,7 +21,12 @@ interface Props {
 }
 
 export default function ConfirmDialog({
-  open, onOpenChange, title, message, onConfirm, onCancel,
+  open,
+  onOpenChange,
+  title,
+  message,
+  onConfirm,
+  onCancel,
 }: Props) {
   const { t } = useTranslation();
 
@@ -31,9 +36,7 @@ export default function ConfirmDialog({
         <AlertDialogContent className="max-w-md w-[calc(100%-2rem)]">
           <AlertDialogHeader>
             <AlertDialogTitle>{title}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {message}
-            </AlertDialogDescription>
+            <AlertDialogDescription>{message}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => onConfirm(false)}>

@@ -4,17 +4,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import loginSchema from '@/schemas/login';
 import useAuth from '@/hooks/useAuth';
-import {
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  Input,
-  Form, FormControl, FormDescription, FormField, FormItem, FormLabel,
-  FormMessage,
-} from '@budmin/ui';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+
 
 export default function Login() {
   const { login } = useAuth();

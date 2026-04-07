@@ -1,7 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import '@budmin/ui/styles.css';
 import './index.css';
 import './i18n';
 

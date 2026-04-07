@@ -1,5 +1,7 @@
+import { Typography } from '@/components/Typography';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 import useAuth from '@/hooks/useAuth';
-import { Button, Spinner, Typography } from '@budmin/ui';
 import { useTranslation } from 'react-i18next';
 
 export default function ResendVerification() {

@@ -6,18 +6,10 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import guestSchema from '@/schemas/guest';
 import useAuth from '@/hooks/useAuth';
-import {
-  Button,
-  Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle,
-  Input,
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@budmin/ui';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 export default function Guest() {
   const { loginGuest } = useAuth();

@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
-import { Typography } from '@budmin/ui/internal/Typography';
+import { Typography } from '../Typography';
 
 interface Props {
   className?: string

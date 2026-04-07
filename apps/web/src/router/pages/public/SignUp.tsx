@@ -9,17 +9,13 @@ import { NavLink, useNavigate } from 'react-router';
 import { z } from 'zod';
 import { es } from 'date-fns/locale';
 import { useEffect } from 'react';
-import {
-  Popover, PopoverContent, PopoverTrigger, Input,
-  Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage,
-  Card, CardContent, CardDescription, CardHeader, CardTitle, Button,
-} from '@budmin/ui';
-import {
-  Calendar,
-} from '@budmin/ui/shadcn/calendar';
-import {
-  Typography,
-} from '@budmin/ui/internal/Typography';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Typography } from '@/components/Typography';
 
 export default function SignUp() {
   const { signUp, state: { error, finishedAsyncAction } } = useAuth();

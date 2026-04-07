@@ -1,8 +1,9 @@
 import type { Transaction } from '@/types';
 import { useTranslation } from 'react-i18next';
 import React from 'react';
-import { Typography, Separator } from '@budmin/ui';
 import TransactionResumeCard from '../TransactionResumeCard';
+import { Typography } from '../Typography';
+import { Separator } from '../ui/separator';
 
 interface Props {
   transactions: Transaction[]

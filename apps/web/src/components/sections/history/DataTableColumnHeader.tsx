@@ -10,10 +10,8 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@budmin/ui/shadcn/dropdown-menu';
-import {
-  Button,
-} from '@budmin/ui/shadcn/button';
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -43,10 +41,10 @@ export default function DataTableColumnHeader<TData, TValue>({
             size="sm"
             className=" h-8 data-[state=open]:bg-accent w-full flex justify-between gap-2"
           >
-            <span className="text-center flex-1">{t(`history.datatable.columns.${column.id}`)}</span>
-            {column.getIsSorted() === 'desc' && (
-              <ArrowDown />
-            )}
+            <span className="text-center flex-1">
+              {t(`history.datatable.columns.${column.id}`)}
+            </span>
+            {column.getIsSorted() === 'desc' && <ArrowDown />}
             {column.getIsSorted() === 'asc' ? (
               <ArrowUp />
             ) : (

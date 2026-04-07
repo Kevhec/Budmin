@@ -1,8 +1,6 @@
+import { Typography } from '@/components/Typography';
 import Countdown from 'react-countdown';
 import { Navigate } from 'react-router';
-import {
-  Typography,
-} from '@budmin/ui/internal/Typography';
 
 const countdownRenderer: (...args: any[]) => any = ({ seconds, completed }) => {
   if (completed) {
