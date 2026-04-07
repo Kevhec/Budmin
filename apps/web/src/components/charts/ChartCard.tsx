@@ -1,7 +1,11 @@
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils"
 import {
-  Card, CardContent, CardDescription, CardHeader, CardTitle,
-} from '@budmin/ui';
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card"
 
 interface Props {
   children: React.ReactNode
@@ -30,18 +34,29 @@ export default function ChartCard({
   hidden,
   children,
 }: Props) {
-  const containerClasses = cn({
-    invisible: hidden,
-  }, 'flex flex-col border-none pb-4 pt-0 rounded-md shadow-none', containerClassName);
+  const containerClasses = cn(
+    {
+      invisible: hidden,
+    },
+    "flex flex-col border-none pb-4 pt-0 rounded-md shadow-none",
+    containerClassName,
+  )
 
-  const titleClasses = cn({
-    'flex gap-2 items-center': titleIcon,
-    'w-full': titleLeft,
-  }, 'font-openSans text-xl', titleClassName);
+  const titleClasses = cn(
+    {
+      "flex gap-2 items-center": titleIcon,
+      "w-full": titleLeft,
+    },
+    "font-openSans text-xl",
+    titleClassName,
+  )
 
-  const headerClasses = cn('flex-row items-center p-4 justify-between', headerClassName);
+  const headerClasses = cn(
+    "flex-row items-center p-4 justify-between",
+    headerClassName,
+  )
 
-  const contentClasses = cn('flex-1 pb-0', contentClassName);
+  const contentClasses = cn("flex-1 pb-0", contentClassName)
 
   return (
     <Card className={containerClasses}>
@@ -53,25 +68,18 @@ export default function ChartCard({
               {title}
             </>
           </CardTitle>
-          {
-            subtitle && (
-              (typeof subtitle === 'string' || typeof subtitle === 'number') ? (
-                <CardDescription className="font-inter capitalize text-left w-full !mt-0">{subtitle}</CardDescription>
-              ) : (
-                subtitle
-              )
-            )
-          }
+          {subtitle &&
+            (typeof subtitle === "string" || typeof subtitle === "number" ? (
+              <CardDescription className="font-inter capitalize text-left w-full !mt-0">
+                {subtitle}
+              </CardDescription>
+            ) : (
+              subtitle
+            ))}
         </div>
-        <>
-          {headerRightElement}
-        </>
+        <>{headerRightElement}</>
       </CardHeader>
-      <CardContent className={contentClasses}>
-        <>
-          {children}
-        </>
-      </CardContent>
+      <CardContent className={contentClasses}>{children}</CardContent>
     </Card>
-  );
+  )
 }

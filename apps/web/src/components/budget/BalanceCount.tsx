@@ -1,8 +1,8 @@
 import { formatMoney } from '@/lib/formatNumber';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { Typography } from '@budmin/ui';
 import { Textfit } from 'react-textfit';
+import { Typography } from '../Typography';
 
 interface Props {
   totalAmount: number

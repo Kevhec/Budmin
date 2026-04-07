@@ -1,9 +1,13 @@
 import { Pie, PieChart } from 'recharts';
 import { formatMoney, suffixNumberFormatter } from '@/lib/formatNumber';
 import {
-  ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent,
-  Separator,
-} from '@budmin/ui';
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '../ui/chart';
+import { Separator } from '../ui/separator';
 
 interface Props {
   chartData: any[]
@@ -13,7 +17,10 @@ interface Props {
 }
 
 export default function ChartPie({
-  chartData, chartConfig, dataKey, nameKey,
+  chartData,
+  chartConfig,
+  dataKey,
+  nameKey,
 }: Props) {
   return (
     <ChartContainer

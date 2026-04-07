@@ -1,8 +1,8 @@
 import { columns } from '@/components/sections/history/Columns';
 import DataTable from '@/components/sections/history/DataTable';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import useTransactions from '@/hooks/useTransactions';
 import type { TablePagination } from '@/types';
-import { ScrollArea, ScrollBar } from '@budmin/ui';
 
 export default function Transactions() {
   const { state: { paginatedTransactions }, changePage } = useTransactions();

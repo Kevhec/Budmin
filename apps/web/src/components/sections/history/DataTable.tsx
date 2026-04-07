@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from "react"
 import {
   type ColumnDef,
   type SortingState,
@@ -8,10 +8,12 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
-} from '@tanstack/react-table';
-import { type PaginationMeta, type TablePagination } from '@/types';
-import debounce from 'just-debounce-it';
-import { useTranslation } from 'react-i18next';
+} from "@tanstack/react-table"
+import { type PaginationMeta, type TablePagination } from "@/types"
+import debounce from "just-debounce-it"
+import { useTranslation } from "react-i18next"
+import DataTablePagination from "./DataTablePagination"
+import { Typography } from "@/components/Typography"
 import {
   Table,
   TableBody,
@@ -19,17 +21,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@budmin/ui/shadcn/table';
-import {
-  Typography,
-} from '@budmin/ui/internal/Typography';
-import DataTablePagination from './DataTablePagination';
+} from "@/components/ui/table"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[],
+  data: TData[]
   meta?: PaginationMeta
-  onPageChange?: (pagination: TablePagination) => void;
+  onPageChange?: (pagination: TablePagination) => void
 }
 
 export default function DataTable<TData, TValue>({
@@ -38,18 +36,22 @@ export default function DataTable<TData, TValue>({
   meta,
   onPageChange,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [pagination, setPagination] = useState<TablePagination>({
     pageIndex: 0,
     pageSize: 20,
-  });
-  const { t } = useTranslation();
+  })
+  const { t } = useTranslation()
 
   const debouncedPageChange = useMemo(
-    () => debounce((newPagination: TablePagination) => onPageChange?.(newPagination), 300),
+    () =>
+      debounce(
+        (newPagination: TablePagination) => onPageChange?.(newPagination),
+        300,
+      ),
     [onPageChange],
-  );
+  )
 
   const table = useReactTable({
     data,
@@ -66,28 +68,31 @@ export default function DataTable<TData, TValue>({
       columnVisibility,
       pagination,
     },
-  });
+  })
 
   useEffect(() => {
-    const isDataEmpty = data.length === 0;
+    const isDataEmpty = data.length === 0
 
-    if (!onPageChange || isDataEmpty) return;
+    if (!onPageChange || isDataEmpty) return
 
-    const isDifferentPage = (pagination.pageIndex + 1) !== meta?.currentPage;
-    const didPageSizeChanged = pagination.pageSize !== meta?.itemsPerPage;
+    const isDifferentPage = pagination.pageIndex + 1 !== meta?.currentPage
+    const didPageSizeChanged = pagination.pageSize !== meta?.itemsPerPage
 
-    if (
-      isDifferentPage || didPageSizeChanged
-    ) {
-      debouncedPageChange(pagination);
+    if (isDifferentPage || didPageSizeChanged) {
+      debouncedPageChange(pagination)
     }
-  }, [pagination, onPageChange, debouncedPageChange, meta?.currentPage, meta?.itemsPerPage, data]);
+  }, [
+    pagination,
+    onPageChange,
+    debouncedPageChange,
+    meta?.currentPage,
+    meta?.itemsPerPage,
+    data,
+  ])
 
   return (
     <div className="space-y-4 h-full">
-      <Typography variant="h2">
-        {t('history.heading')}
-      </Typography>
+      <Typography variant="h2">{t("history.heading")}</Typography>
       {/*       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="ml-auto">
@@ -122,9 +127,9 @@ export default function DataTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                   </>
                 </TableHead>
               ))}
@@ -136,12 +141,15 @@ export default function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && 'selected'}
+                data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     <>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
                     </>
                   </TableCell>
                 ))}
@@ -150,7 +158,7 @@ export default function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                {t('helpers.noData')}
+                {t("helpers.noData")}
               </TableCell>
             </TableRow>
           )}
@@ -158,5 +166,5 @@ export default function DataTable<TData, TValue>({
       </Table>
       <DataTablePagination table={table} />
     </div>
-  );
+  )
 }

@@ -1,7 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import {
-  Typography,
-} from '@budmin/ui/internal/Typography';
+import { Typography } from '../Typography';
 
 export default function NoDataCard() {
   const { t } = useTranslation();

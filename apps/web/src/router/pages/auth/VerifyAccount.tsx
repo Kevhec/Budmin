@@ -1,8 +1,9 @@
+import { Typography } from '@/components/Typography';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
 import useAuth from '@/hooks/useAuth';
 import { useEffect } from 'react';
 import { NavLink, useParams } from 'react-router';
-import { Button, Spinner } from '@budmin/ui';
-import { Typography } from '@budmin/ui/internal/Typography';
 
 export default function VerifyAccount() {
   const { token } = useParams();

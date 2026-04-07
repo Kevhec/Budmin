@@ -1,103 +1,91 @@
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable react-hooks/rules-of-hooks */
-import { type ColumnDef } from '@tanstack/react-table';
-import { type Transaction } from '@/types';
-import { formatMoney } from '@/lib/formatNumber';
-import { format } from '@formkit/tempo';
-import { useTranslation } from 'react-i18next';
-import { ColoredBadge } from '@budmin/ui/internal/ColoredBadge';
-import DataTableColumnHeader from './DataTableColumnHeader';
-import ActionsMenu from './ActionsMenu';
+import { type ColumnDef } from "@tanstack/react-table"
+import { type Transaction } from "@/types"
+import { formatMoney } from "@/lib/formatNumber"
+import { format } from "@formkit/tempo"
+import { useTranslation } from "react-i18next"
+import DataTableColumnHeader from "./DataTableColumnHeader"
+import ActionsMenu from "./ActionsMenu"
+import { ColoredBadge } from "@/components/ColoredBadge"
 
 export const columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: 'date',
+    accessorKey: "date",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Fecha" />
     ),
     cell: ({ row }) => {
-      const { i18n } = useTranslation();
-      const currentLanguage = i18n.language;
+      const { i18n } = useTranslation()
+      const currentLanguage = i18n.language
 
-      const date = new Date(row.getValue('date'));
-      const formatted = format(date, 'long', currentLanguage);
+      const date = new Date(row.getValue("date"))
+      const formatted = format(date, "long", currentLanguage)
 
-      return (
-        <div>
-          {formatted}
-        </div>
-      );
+      return <div>{formatted}</div>
     },
   },
   {
-    accessorKey: 'description',
+    accessorKey: "description",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Descripción" textOnly />
     ),
   },
   {
-    accessorKey: 'amount',
+    accessorKey: "amount",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Valor" />
     ),
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('amount'));
-      const formatted = formatMoney(amount);
+      const amount = parseFloat(row.getValue("amount"))
+      const formatted = formatMoney(amount)
 
-      return (
-        <p className="text-right font-medium">
-          {formatted}
-        </p>
-      );
+      return <p className="text-right font-medium">{formatted}</p>
     },
   },
   {
-    accessorKey: 'type',
+    accessorKey: "type",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Tipo" />
     ),
     cell: ({ row }) => {
-      const { t } = useTranslation();
-      const transaction = row.original;
+      const { t } = useTranslation()
+      const transaction = row.original
 
-      return (
-        <p>
-          {t(`common.${transaction.type}.singular`)}
-        </p>
-      );
+      return <p>{t(`common.${transaction.type}.singular`)}</p>
     },
   },
   {
-    accessorKey: 'category.name',
+    accessorKey: "category.name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Categoría" />
     ),
     cell: ({ row }) => {
-      const { t } = useTranslation();
-      const transaction = row.original;
-      const { category } = transaction;
+      const { t } = useTranslation()
+      const transaction = row.original
+      const { category } = transaction
 
       return (
         <div className="flex justify-center">
           <ColoredBadge
             color={category?.color}
-            label={t(`${category?.key}`) ?? t('category.none')}
+            label={t(`${category?.key}`) ?? t("category.none")}
           />
         </div>
-      );
+      )
     },
   },
   {
-    id: 'budgets',
-    accessorFn: (row) => (row.budget ? `${row.budget.name}` : ''),
+    id: "budgets",
+    accessorFn: (row) => (row.budget ? `${row.budget.name}` : ""),
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Presupuesto" />
     ),
   },
   {
-    id: 'actions',
+    id: "actions",
     cell: ({ row }) => {
-      const transaction = row.original;
+      const transaction = row.original
 
       return (
         /* TODO: Fix pointer events none when closing
@@ -106,11 +94,8 @@ export const columns: ColumnDef<Transaction>[] = [
         remain on document body, possible fix, persist dropdown open if escape key was pressed to
         close modal, then make the user press it again to close dropdown menu
         if wants to close it */
-        <ActionsMenu
-          item={transaction}
-          type="transaction"
-        />
-      );
+        <ActionsMenu item={transaction} type="transaction" />
+      )
     },
   },
-];
+]

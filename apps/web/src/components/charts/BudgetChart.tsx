@@ -1,16 +1,24 @@
 import {
-  CartesianGrid, Line, LineChart, ReferenceArea, XAxis, YAxis,
+  CartesianGrid,
+  Line,
+  LineChart,
+  ReferenceArea,
+  XAxis,
+  YAxis,
 } from 'recharts';
 import { format } from '@formkit/tempo';
 import { suffixNumberFormatter } from '@/lib/formatNumber';
 import type { BudgetAmountDataNullable, BudgetBalanceChartData } from '@/types';
 import { useTranslation } from 'react-i18next';
-import {
-  type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent,
-} from '@budmin/ui/shadcn/chart';
-import { Typography } from '@budmin/ui/internal/Typography';
-import { Separator } from '@budmin/ui/shadcn/separator';
 import { cn } from '@/lib/utils';
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from '../ui/chart';
+import { Typography } from '../Typography';
+import { Separator } from '../ui/separator';
 
 type ValueType = string | number | (string | number)[];
 interface Props {
@@ -30,44 +38,37 @@ interface BudgetChartTooltipProps {
   }
 }
 
-function BudgetChartTooltip({
-  value,
-  item,
-}: BudgetChartTooltipProps) {
+function BudgetChartTooltip({ value, item }: BudgetChartTooltipProps) {
   const { t } = useTranslation();
 
   return (
     <div className="flex gap-2 flex-col">
-      {
-        (item.payload?.description && item.payload?.amount) && (
-          <div className="flex gap-2">
-            <div
-              className="h-2.5 w-2.5 shrink-0 rounded-[2px] bg-darkGray self-center"
-            />
-            <div className="flex flex-col gap-2">
-              <div className="flex gap-2 justify-between">
-                <Typography className="text-xs">
-                  {t('common.transaction.singular')}
-                  :
-                </Typography>
-                <Typography className="text-xs">
-                  {item.payload.description}
-                </Typography>
-              </div>
-              <div className="flex gap-2 justify-between">
-                <Typography className="text-xs">
-                  {t('common.amount')}
-                  :
-                </Typography>
-                <Typography className="text-xs">
-                  $
-                  {item.payload.amount}
-                </Typography>
-              </div>
+      {item.payload?.description && item.payload?.amount && (
+        <div className="flex gap-2">
+          <div className="h-2.5 w-2.5 shrink-0 rounded-[2px] bg-darkGray self-center" />
+          <div className="flex flex-col gap-2">
+            <div className="flex gap-2 justify-between">
+              <Typography className="text-xs">
+                {t('common.transaction.singular')}
+                :
+              </Typography>
+              <Typography className="text-xs">
+                {item.payload.description}
+              </Typography>
+            </div>
+            <div className="flex gap-2 justify-between">
+              <Typography className="text-xs">
+                {t('common.amount')}
+                :
+              </Typography>
+              <Typography className="text-xs">
+                $
+                {item.payload.amount}
+              </Typography>
             </div>
           </div>
-        )
-      }
+        </div>
+      )}
       <Separator decorative />
       <div className="flex gap-2 justify-between">
         <Typography className="text-xs">
@@ -92,11 +93,7 @@ export default function BudgetChart({
   const containerClasses = cn('min-h-[100px]', className);
   return (
     <ChartContainer config={chartConfig} className={containerClasses}>
-      <LineChart
-        accessibilityLayer
-        data={chartData}
-        className="w-full"
-      >
+      <LineChart accessibilityLayer data={chartData} className="w-full">
         <CartesianGrid />
         <XAxis
           dataKey="date"
@@ -119,12 +116,12 @@ export default function BudgetChart({
           />
         )}
         {budgetAmountData?.amountBounds?.warn?.y1 != null
-        && budgetAmountData.amountBounds.warn.y2 != null && (
-          <ReferenceArea
-            y1={budgetAmountData.amountBounds.warn.y1}
-            y2={budgetAmountData.amountBounds.warn.y2}
-            fill="hsl(34 85% 63%)"
-          />
+          && budgetAmountData.amountBounds.warn.y2 != null && (
+            <ReferenceArea
+              y1={budgetAmountData.amountBounds.warn.y1}
+              y2={budgetAmountData.amountBounds.warn.y2}
+              fill="hsl(34 85% 63%)"
+            />
         )}
         {budgetAmountData?.amountBounds?.danger?.y2 != null && (
           <ReferenceArea
@@ -140,10 +137,7 @@ export default function BudgetChart({
               indicator="line"
               // eslint-disable-next-line react/no-unstable-nested-components
               formatter={(value, _, item) => (
-                <BudgetChartTooltip
-                  value={value}
-                  item={item}
-                />
+                <BudgetChartTooltip value={value} item={item} />
               )}
             />
           )}

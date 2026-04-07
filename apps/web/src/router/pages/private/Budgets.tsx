@@ -18,16 +18,12 @@ import AssociatedTransactions from '@/components/budget/AssociatedTransactions';
 import DateRange from '@/components/budget/DateRange';
 import { defaultBalance } from '@/lib/constants';
 import BudgetChart from '@/components/charts/BudgetChart';
-import {
-  ScrollArea,
-  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle,
-  Separator,
-} from '@budmin/ui';
-import {
-  Typography,
-} from '@budmin/ui/internal/Typography';
-import { type ChartConfig } from '@budmin/ui';
 import { cn } from '@/lib/utils';
+import type { ChartConfig } from '@/components/ui/chart';
+import { Typography } from '@/components/Typography';
+import { Separator } from '@/components/ui/separator';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function Budgets() {
   const [selectedBudget, setSelectedBudget] = useState<Budget | null>(null);

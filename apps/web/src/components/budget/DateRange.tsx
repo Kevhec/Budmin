@@ -2,7 +2,8 @@ import { useTranslation } from 'react-i18next';
 import { format } from '@formkit/tempo';
 import { CalendarClock, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Separator, Typography } from '@budmin/ui';
+import { Typography } from '../Typography';
+import { Separator } from '../ui/separator';
 
 interface Props {
   startDate: Date | string
